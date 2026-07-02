@@ -119,13 +119,13 @@
       :style="{ borderBottom: '1px solid #ddd' }"
     >
       <!-- 头像 -->
-      <div v-if="store.info.photo"
-        class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 mx-auto"
+      <div class="w-16 h-16 rounded-full overflow-hidden mb-3 border-2 mx-auto flex items-center justify-center bg-gray-50"
         :style="{ borderColor: store.config.themeColor + '44' }"
       >
-        <img :src="store.info.photo" class="w-full h-full object-cover"
+        <img v-if="store.info.photo" :src="store.info.photo" class="w-full h-full object-cover"
           :style="{ transform: `scale(${store.config.avatarScale})` }"
         />
+        <span v-else class="text-gray-300 text-xl">📷</span>
       </div>
 
       <h1 class="font-light tracking-widest text-gray-800"
@@ -217,12 +217,13 @@
             </p>
           </div>
 
-          <div v-if="store.info.photo" class="shrink-0">
-            <div class="w-20 h-20 rounded-2xl overflow-hidden border-2"
+          <div class="shrink-0">
+            <div class="w-20 h-20 rounded-2xl overflow-hidden border-2 flex items-center justify-center bg-gray-50"
               :style="{ borderColor: store.config.themeColor + '33' }">
-              <img :src="store.info.photo" class="w-full h-full object-cover"
+              <img v-if="store.info.photo" :src="store.info.photo" class="w-full h-full object-cover"
                 :style="{ transform: `scale(${store.config.avatarScale})` }"
               />
+              <span v-else class="text-gray-300 text-2xl">📷</span>
             </div>
           </div>
         </div>
@@ -321,10 +322,12 @@
         <div v-if="store.info.degree">{{ store.info.degree }}</div>
         <div v-if="store.info.location">{{ store.info.location }}</div>
       </div>
-      <div v-if="store.info.photo" class="w-16 shrink-0">
-        <img :src="store.info.photo" class="w-16 h-16 rounded object-cover"
+      <div class="w-16 h-16 shrink-0 rounded overflow-hidden flex items-center justify-center bg-gray-50 border"
+        :style="{ borderColor: store.config.themeColor + '33' }">
+        <img v-if="store.info.photo" :src="store.info.photo" class="w-full h-full object-cover"
           :style="{ transform: `scale(${store.config.avatarScale})` }"
         />
+        <span v-else class="text-gray-300 text-lg">📷</span>
       </div>
     </header>
 
@@ -398,14 +401,23 @@
       :style="{ borderBottom: '1px solid ' + store.config.themeColor }"
     >
       <div class="flex items-end justify-between">
-        <h1 class="font-bold tracking-tight"
-          :style="{ color: store.config.themeColor, fontSize: store.config.nameSize + 'px' }">
-          {{ store.info.name }}
-        </h1>
-        <p class="text-gray-600 font-medium"
-          :style="{ fontSize: (store.config.titleFontSize + 1) + 'px' }">
-          {{ store.info.intent }}
-        </p>
+        <div class="flex-1">
+          <h1 class="font-bold tracking-tight"
+            :style="{ color: store.config.themeColor, fontSize: store.config.nameSize + 'px' }">
+            {{ store.info.name }}
+          </h1>
+          <p class="text-gray-600 font-medium"
+            :style="{ fontSize: (store.config.titleFontSize + 1) + 'px' }">
+            {{ store.info.intent }}
+          </p>
+        </div>
+        <div class="w-14 h-14 shrink-0 rounded overflow-hidden flex items-center justify-center bg-gray-100 border ml-3"
+          :style="{ borderColor: store.config.themeColor + '33' }">
+          <img v-if="store.info.photo" :src="store.info.photo" class="w-full h-full object-cover"
+            :style="{ transform: `scale(${store.config.avatarScale})` }"
+          />
+          <span v-else class="text-gray-300 text-lg">📷</span>
+        </div>
       </div>
       <div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-gray-500 text-[10px]">
         <span v-if="store.info.phone">📞 {{ store.info.phone }}</span>
