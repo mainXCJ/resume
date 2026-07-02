@@ -263,16 +263,16 @@ const runHistoryCommand = (textareaId, command) => {
 }
 
 const handleImportJSON = async (event) => {
-  const e = event
   const file = event.target.files?.[0]
   if (!file) return
   try {
     const content = await readFile(file)
     const success = importDraftFromJSON(content)
+    // 导入成功后刷新页面让所有状态同步
     if (success) {
-      alert('✅ 简历配置与草稿已成功导入！');
+      event.target.value = ''
+      window.location.reload()
     }
-    e.target.value = ''; // 清空 input，允许后续重复导入同一文件
   } finally {
     event.target.value = ''
   }
@@ -319,48 +319,6 @@ const incrementHierarchicalMarker = (marker) => {
   segments[segments.length - 1] += 1
   return segments.join('.')
 }
-
-const handleEnterKey = (event, textareaId, item) => {
-  const el = getTextareaElement(textareaId);
-  if (!el) return;
-  
-  const start = el.selectionStart;
-  const end = el.selectionEnd;
-  const text = el.value;
-  
-  // 获取当前行的文本
-  const lineStart = text.lastIndexOf('\n', start - 1) + 1;
-  const lineEnd = text.indexOf('\n', start) !== -1 ? text.indexOf('\n', start) : text.length;
-  const lineText = text.substring(lineStart, lineEnd);
-  
-  // 检查是否是编号列表（如 "1. "、"2. " 等）
-  const numberedListRegex = /^(\s*)(\d+)\.\s+/;
-  const match = lineText.match(numberedListRegex);
-  
-  if (match) {
-    // 阻止默认行为
-    event.preventDefault();
-    
-    // 提取缩进、编号并递增
-    const indentation = match[1];
-    const currentNumber = parseInt(match[2], 10);
-    const nextNumber = currentNumber + 1;
-    
-    // 构建新行内容
-    const replacement = '\n' + indentation + nextNumber + '. ';
-    
-    // 插入新行和新编号
-    item.content = text.substring(0, start) + replacement + text.substring(end);
-    
-    // 设置光标位置到新编号后
-    nextTick(() => {
-      el.focus();
-      const newPosition = start + replacement.length;
-      el.setSelectionRange(newPosition, newPosition);
-    });
-  }
-  // 如果不是编号列表，允许默认行为
-};
 
 const handleTabKey = (event, textareaId, item) => {
   const el = getTextareaElement(textareaId)
@@ -465,7 +423,7 @@ const switchTemplate = (templateId) => {
     Object.assign(store.config, {
       nameSize: tpl.config.nameSize,
       titleSize: tpl.config.titleSize,
-      titleFontSize: tpl.config.titleFontSize || 12,
+      titleFontSize: tpl.config.titleFontSize,
       bodyFontSize: tpl.config.bodyFontSize,
       lineHeight: tpl.config.lineHeight,
       moduleSpacing: tpl.config.moduleSpacing,

@@ -13,6 +13,7 @@ export const TEMPLATES = [
       // 主题色系统将使用 store.config.themeColor
       nameSize: 32,
       titleSize: 15,
+      titleFontSize: 12,
       bodyFontSize: 11.5,
       lineHeight: 1.15,
       moduleSpacing: 6,
@@ -46,6 +47,7 @@ export const TEMPLATES = [
     config: {
       nameSize: 24,
       titleSize: 14,
+      titleFontSize: 11,
       bodyFontSize: 11,
       lineHeight: 1.2,
       moduleSpacing: 5,
@@ -80,6 +82,7 @@ export const TEMPLATES = [
     config: {
       nameSize: 28,
       titleSize: 13,
+      titleFontSize: 11,
       bodyFontSize: 11,
       lineHeight: 1.3,
       moduleSpacing: 4,
@@ -112,6 +115,7 @@ export const TEMPLATES = [
     config: {
       nameSize: 30,
       titleSize: 14,
+      titleFontSize: 11.5,
       bodyFontSize: 11,
       lineHeight: 1.15,
       moduleSpacing: 8,
@@ -144,6 +148,7 @@ export const TEMPLATES = [
     config: {
       nameSize: 30,
       titleSize: 14,
+      titleFontSize: 11.5,
       bodyFontSize: 11,
       lineHeight: 1.2,
       moduleSpacing: 6,
@@ -176,6 +181,7 @@ export const TEMPLATES = [
     config: {
       nameSize: 28,
       titleSize: 13,
+      titleFontSize: 11,
       bodyFontSize: 10.5,
       lineHeight: 1.1,
       moduleSpacing: 4,
