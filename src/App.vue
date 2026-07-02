@@ -24,14 +24,31 @@
       <EditorPanel />
       <PreviewPanel />
     </div>
+
+    <!-- Toast 通知 -->
+    <Teleport to="body">
+      <div v-if="toastMessage"
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300"
+        :style="{ background: toastMessage.startsWith('✅') ? '#065f46' : '#92400e', color: '#fff' }">
+        {{ toastMessage }}
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { store } from './store'
 import EditorPanel from './components/EditorPanel.vue'
 import PreviewPanel from './components/PreviewPanel.vue'
+
+const toastMessage = ref('')
+let toastTimer = null
+const showToast = (msg, duration = 2500) => {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => { toastMessage.value = ''; toastTimer = null }, duration)
+}
 
 const globalFontSize = computed({
     get: () => Number(store.config.bodyFontSize ?? 12),
@@ -46,16 +63,28 @@ const adjustGlobalFontSize = (delta) => {
 }
 
 const handlePrint = () => {
-    // 调用浏览器原生打印
-    window.print();
+    showToast('🖨️ 即将打开打印对话框…', 2000)
+    setTimeout(() => window.print(), 500)
 }
 
 const handleExportDocx = () => {
-  // 获取简历渲染内容
-  const canvas = document.getElementById('resume-canvas')
-  if (!canvas) { alert('请先预览简历'); return }
+  // 优先读取屏幕预览内容，隐藏的 resume-canvas 用于回退
+  const screenPapers = document.querySelectorAll('#preview-container .resume-paper:not(.fixed)')
+  let contentHTML = ''
 
-  const contentHTML = canvas.innerHTML
+  if (screenPapers.length) {
+    screenPapers.forEach(page => { contentHTML += page.innerHTML + '\n<div style="page-break-before: always"></div>\n' })
+    // 去掉最后一个分页符
+    contentHTML = contentHTML.replace(/\n<div style="page-break-before: always"><\/div>\n$/, '')
+  } else {
+    const canvas = document.getElementById('resume-canvas')
+    if (canvas) contentHTML = canvas.innerHTML
+  }
+
+  if (!contentHTML || contentHTML.trim() === '') {
+    showToast('⚠️ 简历内容为空，请先添加内容', 3000)
+    return
+  }
   const themeColor = store.config.themeColor
   const nameSize = store.config.nameSize
   const titleSize = store.config.titleSize
@@ -108,5 +137,6 @@ const handleExportDocx = () => {
   link.click()
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
+  showToast('✅ Word 文档已下载')
 }
 </script>

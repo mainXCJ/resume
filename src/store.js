@@ -199,7 +199,8 @@ export const resetDraft = () => {
 
 // ✨ 新增：导出草稿为 JSON 文件
 export const exportDraftToJSON = () => {
-    const dataStr = JSON.stringify(store, null, 2);
+    const exportData = { ...store, template: store.template };
+    const dataStr = JSON.stringify(exportData, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -219,6 +220,7 @@ export const importDraftFromJSON = (jsonString) => {
             Object.assign(store.config, parsed.config);
             Object.assign(store.info, parsed.info);
             if (parsed.ui) Object.assign(store.ui, parsed.ui);
+            if (parsed.template) store.template = parsed.template;
 
             // 2. 智能合并模块策略：
             // 优先应用 JSON 中的自定义模块和顺序，同时兼容“未来代码中可能加入的全新模块”

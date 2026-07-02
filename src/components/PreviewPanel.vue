@@ -84,7 +84,7 @@
 
     <!-- 打印画布 -->
     <div id="resume-canvas" class="resume-paper bg-white shadow-2xl relative hidden print:block print:shadow-none" :style="printCanvasStyle">
-      <template v-if="store.config.__templateStyle === 'sidebar'">
+      <template v-if="store.template === 'sidebar'">
         <div class="flex">
           <div :style="{ width: '35%', background: store.config.themeColor }">
             <div v-for="block in printBlocks.filter(b => b.__side === 'left')" :key="block.id">
@@ -179,8 +179,6 @@ const printCanvasStyle = computed(() => ({
 }))
 
 // ---------- 侧栏模板的模块分配 ----------
-const sidebarModuleIds = ['skills', 'cert', 'eval', 'contact']
-
 const isSidebarModule = (mod) => {
   // 技能、证书、评价等模块放入侧栏
   return ['skills', 'cert', 'eval'].includes(mod.id)
@@ -655,7 +653,6 @@ const renderRichText = (text) => {
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    border-color: transparent !important;
     outline: none !important;
   }
   .w-1\/2 { width: 100% !important; }
