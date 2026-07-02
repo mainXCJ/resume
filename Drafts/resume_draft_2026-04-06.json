@@ -1,0 +1,241 @@
+{
+  "config": {
+    "themeColor": "#1A4F85",
+    "fontFamily": "PingFang",
+    "nameSize": 32,
+    "avatarScale": 1,
+    "titleSize": 15,
+    "titleFontSize": 12,
+    "bodyFontSize": 11.5,
+    "lineHeight": 1.1,
+    "moduleSpacing": 5,
+    "margin": {
+      "top": 14,
+      "bottom": 14,
+      "left": 12,
+      "right": 12
+    }
+  },
+  "themeOptions": [
+    {
+      "name": "经典商务蓝",
+      "value": "#005A9E"
+    },
+    {
+      "name": "沉稳藏青色",
+      "value": "#1A4F85"
+    },
+    {
+      "name": "典雅绛红色",
+      "value": "#8A1538"
+    },
+    {
+      "name": "曜石纯黑色",
+      "value": "#222222"
+    }
+  ],
+  "ui": {
+    "activeTab": "content",
+    "activeModuleId": "base"
+  },
+  "info": {
+    "name": "王昕",
+    "intent": "电子信息硕士 / 硬件工程师",
+    "phone": "138-1234-5678",
+    "email": "wangxin@example.com",
+    "github": "",
+    "location": "浙江杭州",
+    "degree": "电子信息 硕士",
+    "photo": ""
+  },
+  "modules": [
+    {
+      "id": "edu",
+      "title": "教育背景",
+      "icon": "",
+      "isSingle": false,
+      "visible": true,
+      "showDivider": false,
+      "items": [
+        {
+          "p1": "中国计量大学",
+          "p2": "电子信息 硕士",
+          "p3": "2026.09 - 2029.06",
+          "content": "主修硬件工程，专业排名前5%"
+        },
+        {
+          "p1": "南京理工大学紫金学院",
+          "p2": "电子信息 本科",
+          "p3": "2022.09 - 2026.06",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "id": "campus",
+      "title": "校园经历",
+      "icon": "",
+      "isSingle": false,
+      "visible": false,
+      "showDivider": true,
+      "items": [
+        {
+          "p1": "校研究生会",
+          "p2": "宣传部部长",
+          "p3": "2026.10 - 2027.06",
+          "content": "- 负责学院日常活动的策划与宣发"
+        }
+      ]
+    },
+    {
+      "id": "exam",
+      "title": "考研成绩",
+      "icon": "",
+      "isSingle": false,
+      "visible": true,
+      "showDivider": false,
+      "items": [
+        {
+          "p1": "中国计量大学 电子信息",
+          "p2": "初试总分: 385",
+          "p3": "2026.02",
+          "content": "| 考试科目 | 成绩 | 排名/备注 |\n|---|---|---|\n| 数学一 | 115 | 院系前 10% |\n| 专业课(801) | 125 | 专业前 5% |"
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "title": "专业技能",
+      "icon": "",
+      "isSingle": true,
+      "visible": true,
+      "showDivider": false,
+      "items": [
+        {
+          "p1": "",
+          "p2": "",
+          "p3": "",
+          "content": "- 核心栈：【Altium Designer】 【C语言】\n  使得AV"
+        }
+      ]
+    },
+    {
+      "id": "intern",
+      "title": "实习经历",
+      "icon": "",
+      "isSingle": false,
+      "visible": false,
+      "showDivider": true,
+      "items": [
+        {
+          "p1": "某科技公司",
+          "p2": "硬件开发实习生",
+          "p3": "2025.07",
+          "content": "- 参与某工业网关的硬件改版。"
+        }
+      ]
+    },
+    {
+      "id": "work",
+      "title": "工作经历",
+      "icon": "",
+      "isSingle": false,
+      "visible": false,
+      "showDivider": true,
+      "items": [
+        {
+          "p1": "XX 电子研究所",
+          "p2": "助理工程师",
+          "p3": "2029.07",
+          "content": "- 负责嵌入式系统的硬件架构设计。"
+        }
+      ]
+    },
+    {
+      "id": "project",
+      "title": "项目经历",
+      "icon": "",
+      "isSingle": false,
+      "visible": true,
+      "showDivider": true,
+      "items": [
+        {
+          "p1": "智能物联网监测系统",
+          "p2": "核心硬件研发",
+          "p3": "2023.05 - 2023.10",
+          "content": "1. 独立完成 PCB 原理图设计。"
+        },
+        {
+          "p1": "高频信号放大器设计",
+          "p2": "硬件工程组长",
+          "p3": "2022.11 - 2023.03",
+          "content": "- 负责电路拓扑设计。"
+        }
+      ]
+    },
+    {
+      "id": "award",
+      "title": "获奖经历",
+      "icon": "",
+      "isSingle": false,
+      "visible": false,
+      "showDivider": false,
+      "items": [
+        {
+          "p1": "电子设计竞赛",
+          "p2": "国家级二等奖",
+          "p3": "2024.08",
+          "content": "- 算法实现。"
+        }
+      ]
+    },
+    {
+      "id": "cert",
+      "title": "证书信息",
+      "icon": "",
+      "isSingle": true,
+      "visible": false,
+      "showDivider": false,
+      "items": [
+        {
+          "p1": "",
+          "p2": "",
+          "p3": "",
+          "content": "- 英语六级 (CET-6)"
+        }
+      ]
+    },
+    {
+      "id": "eval",
+      "title": "个人评价",
+      "icon": "",
+      "isSingle": true,
+      "visible": false,
+      "showDivider": false,
+      "items": [
+        {
+          "p1": "",
+          "p2": "",
+          "p3": "",
+          "content": "- 具备极强的自学能力。"
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "title": "科研成果",
+      "icon": "",
+      "isSingle": false,
+      "visible": false,
+      "showDivider": true,
+      "items": [
+        {
+          "p1": "传感器节点专利",
+          "p2": "第一发明人",
+          "p3": "2027.12",
+          "content": "- 专利号：CN123456789A"
+        }
+      ]
+    }
+  ]
+}

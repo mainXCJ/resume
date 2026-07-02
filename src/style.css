@@ -1,0 +1,85 @@
+/* 1. 注册屏幕预览字体 */
+@font-face {
+  font-family: 'ResumeFont';
+  src: url('/fonts/PingFangSC-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+/* 2. 注册图标字体 (FontAwesome) */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('/fonts/fa-solid-900.ttf') format('truetype');
+  font-weight: 900;
+}
+
+/* 图标基础类 */
+.icon {
+  font-family: 'FontAwesome' !important;
+  font-style: normal;
+  font-weight: 900;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 屏幕显示基准 */
+body {
+  font-family: 'ResumeFont', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { font-synthesis: none !important; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 🖨️ 打印终极防转曲 (Type-3) 补丁 */
+/* --- 打印模式终极重置 --- */
+@media print {
+  /* 1. 隐藏所有不需要打印的 UI 元素 */
+  .no-print, .no-print * {
+    display: none !important;
+  }
+
+  /* 2. 彻底抹除所有导致虚线框的干扰项 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    border-color: transparent !important; /* 默认隐藏所有边框 */
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  /* 3. 强制背景为白色 */
+  body, html {
+    background: #fff !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  /* 4. 恢复我们真正需要的边框 */
+  /* 姓名下方的横线 */
+  .resume-paper header {
+    border-bottom: 1.5px solid var(--print-theme-color) !important;
+  }
+  /* 模块标题下方的横线 */
+  .resume-paper h2 {
+    border-bottom: 1.5px solid #e5e7eb !important;
+  }
+  /* 表格边框（强制设为实线） */
+  .resume-paper table, 
+  .resume-paper td {
+    border: 1px solid #d1d5db !important;
+  }
+  /* 项目经历间的虚线分割线 (hr 标签) */
+  .resume-paper hr {
+    display: block !important;
+    border-top: 1px dashed #e5e7eb !important;
+    border-bottom: none !important;
+    height: 0 !important;
+    width: 100% !important;
+  }
+
+  /* 5. 确保斜体生效 */
+  em {
+    font-style: italic !important;
+    font-synthesis: style !important;
+  }
+}
