@@ -1,26 +1,32 @@
 <template>
-  <div class="flex h-screen flex-col font-sans bg-gray-100">
-    <header class="bg-gray-900 text-white h-14 flex items-center justify-between px-6 shrink-0 z-10 no-print">
-      <div class="text-lg font-bold tracking-wider">📄 MD-Resume Studio</div>
-      
-      <div class="flex gap-4 items-center">
-        <label class="text-sm text-gray-300">全局字号:</label>
-        <div class="flex items-center bg-gray-800 rounded px-1">
-          <button @click="adjustGlobalFontSize(-0.5)" class="px-2 py-1 hover:text-blue-400">-</button>
-          <span class="w-8 text-center text-sm font-bold">{{ globalFontSize.toFixed(1) }}</span>
-          <button @click="adjustGlobalFontSize(0.5)" class="px-2 py-1 hover:text-blue-400">+</button>
+  <div class="flex h-screen flex-col font-sans bg-gradient-to-br from-gray-50 to-gray-100">
+    <header class="text-white h-14 flex items-center justify-between px-5 shrink-0 z-10 no-print"
+      :style="{ background: `linear-gradient(135deg, ${store.config.themeColor} 0%, ${store.config.themeColor}dd 100%)` }">
+      <div class="flex items-center gap-3">
+        <span class="text-xl font-bold tracking-tight">MD-Resume Studio</span>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-white/20 font-medium">在线简历编辑器</span>
+      </div>
+
+      <div class="flex gap-3 items-center">
+        <div class="flex items-center gap-1.5 bg-white/15 rounded-lg px-2.5 py-1">
+          <span class="text-[11px] text-white/70 font-medium">字号</span>
+          <button @click="adjustGlobalFontSize(-0.5)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-white/20 text-sm font-bold transition-colors">−</button>
+          <span class="w-7 text-center text-xs font-bold tabular-nums">{{ globalFontSize.toFixed(1) }}</span>
+          <button @click="adjustGlobalFontSize(0.5)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-white/20 text-sm font-bold transition-colors">+</button>
         </div>
 
-        <button @click="handlePrint" class="bg-blue-600 hover:bg-blue-500 px-5 py-1.5 rounded text-sm font-bold shadow-md transition-colors">
-          📥 导出 PDF
+        <button @click="handlePrint" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 border border-white/10">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          导出 PDF
         </button>
-        <button @click="handleExportDocx" class="bg-emerald-600 hover:bg-emerald-500 px-5 py-1.5 rounded text-sm font-bold shadow-md transition-colors">
-          📝 导出 Word
+        <button @click="handleExportDocx" class="bg-white hover:bg-white/90 text-gray-800 px-4 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Word
         </button>
       </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden gap-0.5 bg-gray-200/50">
       <EditorPanel />
       <PreviewPanel />
     </div>
@@ -28,9 +34,9 @@
     <!-- Toast 通知 -->
     <Teleport to="body">
       <div v-if="toastMessage"
-        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300"
-        :style="{ background: toastMessage.startsWith('✅') ? '#065f46' : '#92400e', color: '#fff' }">
-        {{ toastMessage }}
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] px-5 py-2.5 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300 backdrop-blur-sm"
+        :style="{ background: toastMessage.startsWith('✅') ? '#065f46ee' : '#92400eee', color: '#fff' }">
+        <span class="flex items-center gap-2">{{ toastMessage }}</span>
       </div>
     </Teleport>
   </div>
