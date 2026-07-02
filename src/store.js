@@ -31,14 +31,14 @@ const getDefaultState = () => ({
     },
     // 4. 基础个人信息
     info: {
-        name: '王昕', 
-        intent: '电子信息硕士 / 硬件工程师',
-        phone: '138-1234-5678', 
-        email: 'wangxin@example.com',
-        github: '', 
-        location: '浙江杭州', 
-        degree: '电子信息 硕士',
-        photo: '' 
+        name: '某某',
+        intent: '求职意向',
+        phone: 'XXX-XXXX-XXXX',
+        email: 'email@example.com',
+        github: '',
+        location: '某城市',
+        degree: '某专业 学历',
+        photo: ''
     },
     // 5. 简历核心模块
     modules: [
@@ -50,8 +50,8 @@ const getDefaultState = () => ({
             visible: true, 
             showDivider: false,
             items: [
-                { p1: '中国计量大学', p2: '电子信息 硕士', p3: '2026.09 - 2029.06', content: '主修硬件工程，专业排名前5%' },
-                { p1: '南京理工大学紫金学院', p2: '电子信息 本科', p3: '2022.09 - 2026.06', content: '' }
+                { p1: '某大学', p2: '某专业 硕士', p3: '202X.09 - 202X.06', content: '主修某专业，成绩优良' },
+                { p1: '某大学', p2: '某专业 本科', p3: '202X.09 - 202X.06', content: '' }
             ]
         },
         {
@@ -62,7 +62,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: true,
             items: [
-                { p1: '校研究生会', p2: '宣传部部长', p3: '2026.10 - 2027.06', content: '- 负责学院日常活动的策划与宣发' }
+                { p1: '某学生组织', p2: '某职务', p3: '202X.10 - 202X.06', content: '- 负责相关活动的策划与执行' }
             ]
         },
         {
@@ -73,9 +73,9 @@ const getDefaultState = () => ({
             visible: true, 
             showDivider: false,
             items: [
-                { 
-                  p1: '中国计量大学 电子信息', p2: '初试总分: 385', p3: '2026.02', 
-                  content: '| 考试科目 | 成绩 | 排名/备注 |\n|---|---|---|\n| 数学一 | 115 | 院系前 10% |\n| 专业课(801) | 125 | 专业前 5% |' 
+                {
+                  p1: '某大学 某专业', p2: '初试总分: XXX', p3: '202X.02',
+                  content: '| 考试科目 | 成绩 | 排名/备注 |\n|---|---|---|\n| 科目一 | XX | 前 XX% |\n| 科目二(XXX) | XX | 前 XX% |'
                 }
             ]
         },
@@ -87,7 +87,7 @@ const getDefaultState = () => ({
             visible: true, 
             showDivider: false,
             items: [
-                { p1: '', p2: '', p3: '', content: '- 核心栈：【Altium Designer】 【C语言】\n  - 精通 单片机底层开发。' }
+                { p1: '', p2: '', p3: '', content: '- 核心栈：【某技术栈】\n  - 精通 某领域开发。' }
             ]
         },
         {
@@ -98,7 +98,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: true,
             items: [
-                { p1: '某科技公司', p2: '硬件开发实习生', p3: '2025.07', content: '- 参与某工业网关的硬件改版。' }
+                { p1: '某科技公司', p2: '实习生', p3: '202X.07', content: '- 参与某项目的硬件开发工作。' }
             ]
         },
         {
@@ -109,7 +109,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: true,
             items: [
-                { p1: 'XX 电子研究所', p2: '助理工程师', p3: '2029.07', content: '- 负责嵌入式系统的硬件架构设计。' }
+                { p1: '某研究所', p2: '助理工程师', p3: '202X.07', content: '- 负责某系统的相关设计工作。' }
             ]
         },
         {
@@ -120,8 +120,8 @@ const getDefaultState = () => ({
             visible: true, 
             showDivider: true, 
             items: [
-                { p1: '智能物联网监测系统', p2: '核心硬件研发', p3: '2023.05 - 2023.10', content: '1. 独立完成 PCB 原理图设计。' },
-                { p1: '高频信号放大器设计', p2: '硬件工程组长', p3: '2022.11 - 2023.03', content: '- 负责电路拓扑设计。' }
+                { p1: '某项目', p2: '某角色', p3: '202X.05 - 202X.10', content: '1. 独立完成相关工作。' },
+                { p1: '某项目', p2: '某角色', p3: '202X.11 - 202X.03', content: '- 负责相关设计工作。' }
             ]
         },
         {
@@ -132,7 +132,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: false,
             items: [
-                { p1: '电子设计竞赛', p2: '国家级二等奖', p3: '2024.08', content: '- 算法实现。' }
+                { p1: '某竞赛', p2: '某等奖', p3: '202X.08', content: '- 相关工作。' }
             ]
         },
         {
@@ -143,7 +143,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: false,
             items: [
-                { p1: '', p2: '', p3: '', content: '- 英语六级 (CET-6)' }
+                { p1: '', p2: '', p3: '', content: '- 某语言等级证书' }
             ]
         },
         {
@@ -154,7 +154,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: false,
             items: [
-                { p1: '', p2: '', p3: '', content: '- 具备极强的自学能力。' }
+                { p1: '', p2: '', p3: '', content: '- 具备良好的学习能力。' }
             ]
         },
         {
@@ -165,7 +165,7 @@ const getDefaultState = () => ({
             visible: false, 
             showDivider: true,
             items: [
-                { p1: '传感器节点专利', p2: '第一发明人', p3: '2027.12', content: '- 专利号：CN123456789A' }
+                { p1: '某专利', p2: '第某发明人', p3: '202X.12', content: '- 专利号：CNXXXXXXX' }
             ]
         }
     ]
