@@ -48,8 +48,14 @@
         <label class="cursor-pointer text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1"
           :style="{ color: store.config.themeColor, background: store.config.themeColor + '12' }">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-          导入
+          JSON
           <input type="file" accept=".json" class="hidden" @change="handleImportJSON" />
+        </label>
+        <label class="cursor-pointer text-[10px] font-bold px-2 py-1.5 rounded-lg transition-all flex items-center gap-1"
+          :style="{ color: store.config.themeColor, background: store.config.themeColor + '12' }">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          简历
+          <input type="file" accept=".docx,.pdf,.txt" class="hidden" @change="handleImportFile" />
         </label>
         <button @click="resetDraft" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all text-gray-400 hover:text-red-500 hover:bg-red-50 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -286,6 +292,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { store, resetDraft, exportDraftToJSON, importDraftFromJSON } from '../store'
 import { TEMPLATES } from '../templates.js'
+import { extractTextFromFile, parseResumeText, applyParsedData } from '../importer.js'
 
 if (!store.ui) {
   store.ui = { activeTab: 'content', activeModuleId: 'info' }
@@ -359,6 +366,31 @@ const handleImportJSON = async (event) => {
     }
   } finally {
     event.target.value = ''
+  }
+}
+
+const handleImportFile = async (event) => {
+  const file = event.target.files?.[0]
+  if (!file) return
+  event.target.value = ''
+
+  try {
+    // 提取文本
+    const text = await extractTextFromFile(file)
+    if (!text) return
+
+    // 解析
+    const parsed = parseResumeText(text)
+    if (!parsed || (!parsed.info.name && !parsed.sections.length)) {
+      alert('未能从文件中识别出简历内容，请确认文件格式正确。')
+      return
+    }
+
+    // 应用到 store
+    applyParsedData(store, parsed)
+    window.location.reload()
+  } catch (e) {
+    alert('导入失败：' + e.message)
   }
 }
 
