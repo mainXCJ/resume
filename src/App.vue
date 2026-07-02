@@ -26,7 +26,7 @@
       </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden gap-0.5 bg-gray-200/50">
+    <div class="flex flex-1 overflow-hidden gap-px bg-gray-100/40">
       <EditorPanel />
       <PreviewPanel />
     </div>

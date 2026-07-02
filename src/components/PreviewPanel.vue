@@ -1,5 +1,5 @@
 <template>
-  <div id="preview-container" class="w-1/2 print:w-full flex justify-center overflow-y-auto p-4 no-scrollbar bg-gray-300 print:bg-white print:p-0 items-start">
+  <div id="preview-container" class="w-1/2 print:w-full flex justify-center overflow-y-auto p-4 no-scrollbar bg-gray-50 print:bg-white print:p-0 items-start">
     <div v-html="printStyle"></div>
 
     <!-- 屏幕预览 -->

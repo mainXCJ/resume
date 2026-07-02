@@ -39,7 +39,7 @@
           :style="{ background: store.config.themeColor }"></div>
       </button>
 
-      <div class="flex items-center gap-1.5 px-3 border-l bg-gray-50/80 shrink-0">
+      <div class="flex items-center gap-1.5 px-3 border-l bg-gray-50 shrink-0">
         <button @click="exportDraftToJSON" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1"
           :style="{ color: store.config.themeColor, background: store.config.themeColor + '12' }">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -90,12 +90,11 @@
               <div v-for="(label, key) in infoFieldMap" :key="key">
                 <label class="text-[10px] font-bold text-gray-400 uppercase mb-1.5 block">{{ label }}</label>
                 <input v-model="store.info[key]"
-                  class="w-full border border-gray-200 bg-gray-50/50 px-3 py-2 rounded-lg text-sm focus:outline-none transition-all"
-                  :style="{ focus: `ring-2 ring-${store.config.themeColor}22` }"
-                  @focus="$el => $el.target.style.borderColor = store.config.themeColor"
-                  @blur="$el => $el.target.style.borderColor = ''">
+                  class="w-full border border-gray-200 bg-white px-3 py-2.5 rounded-lg text-sm focus:outline-none transition-all shadow-sm"
+                  @focus="e => e.target.style.borderColor = store.config.themeColor"
+                  @blur="e => e.target.style.borderColor = ''">
               </div>
-              <div class="col-span-2 border border-dashed border-gray-200 rounded-xl p-4 bg-gray-50/50 flex flex-col gap-3 mt-1">
+              <div class="col-span-2 border border-dashed border-gray-200 rounded-xl p-4 bg-white flex flex-col gap-3 mt-1">
                 <label class="text-xs text-gray-500 font-bold flex items-center gap-2">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                   证件照 <span class="font-normal text-[10px] text-gray-400">(建议一寸蓝底/白底)</span>
@@ -132,12 +131,12 @@
                 <button v-if="!mod.isSingle" @click="mod.items.splice(iIdx, 1)" class="absolute -top-2 -right-2 bg-white border border-red-200 text-red-500 rounded-full w-6 h-6 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 font-bold text-lg hover:bg-red-50">×</button>
 
                 <div v-if="!mod.isSingle" class="grid grid-cols-3 gap-2.5 mb-3">
-                  <input v-model="item.p1" class="border border-gray-200 bg-gray-50/30 px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all" placeholder="主标题 (学校/公司)">
-                  <input v-model="item.p2" class="border border-gray-200 bg-gray-50/30 px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all" placeholder="副标题 (专业/职位)">
-                  <input v-model="item.p3" class="border border-gray-200 bg-gray-50/30 px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all" placeholder="时间周期">
+                  <input v-model="item.p1" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="主标题 (学校/公司)">
+                  <input v-model="item.p2" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="副标题 (专业/职位)">
+                  <input v-model="item.p3" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="时间周期">
                 </div>
 
-                <div class="flex items-center gap-0.5 mb-2 bg-gray-100/80 p-1 rounded-lg border border-gray-200/80">
+                <div class="flex items-center gap-0.5 mb-2 bg-white p-1 rounded-lg border border-gray-100 shadow-sm">
                   <button @click="handleUndo('txt-'+mod.id+'-'+iIdx)" title="撤回" class="px-2 py-1 hover:bg-white rounded text-[10px] font-medium transition-colors text-gray-500">↶</button>
                   <button @click="handleRedo('txt-'+mod.id+'-'+iIdx)" title="重做" class="px-2 py-1 hover:bg-white rounded text-[10px] font-medium transition-colors text-gray-500">↷</button>
                   <div class="w-px h-4 bg-gray-300 mx-0.5"></div>
@@ -158,7 +157,7 @@
                   @keydown.ctrl.b.prevent="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '**', '**')"
                   @keydown.ctrl.i.prevent="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '*', '*')"
                   @keydown.enter="enhancedHandleEnterKey($event, 'txt-'+mod.id+'-'+iIdx, item)"
-                  class="w-full border border-gray-200 bg-gray-50/30 p-3 rounded-lg text-xs h-44 focus:outline-none transition-all font-mono leading-relaxed resize-vertical"
+                  class="w-full border border-gray-200 bg-white p-3 rounded-lg text-xs h-44 focus:outline-none transition-all shadow-sm font-mono leading-relaxed resize-vertical"
                   placeholder="支持 Markdown 语法...&#10;&#10;例:&#10;- 负责某某系统的设计与开发&#10;- 使用 **技术栈** 实现了某某功能&#10;1. 第一步&#10;2. 第二步"
                 ></textarea>
               </div>
@@ -208,20 +207,19 @@
         </h3>
 
         <section class="space-y-6">
-          <div class="bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+          <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
             <label class="text-xs font-bold text-gray-500 block mb-3">🎨 主题色</label>
             <div class="flex gap-3 items-center">
               <button v-for="color in store.themeOptions" :key="color.value" @click="store.config.themeColor = color.value"
                 :style="{ backgroundColor: color.value }"
                 class="w-7 h-7 rounded-full border-2 transition-all hover:scale-110 shadow-sm"
-                :class="store.config.themeColor === color.value ? 'border-gray-800 scale-110 ring-2 ring-offset-2' : 'border-transparent'"
-                :style2="store.config.themeColor === color.value ? { ringColor: color.value + '44' } : {}">
+                :class="store.config.themeColor === color.value ? 'border-gray-800 scale-110 ring-2 ring-offset-2' : 'border-transparent'">
               </button>
               <input type="color" v-model="store.config.themeColor" class="w-7 h-7 p-0 border-0 rounded cursor-pointer">
             </div>
           </div>
 
-          <div class="bg-gray-50/50 rounded-xl p-4 border border-gray-100 space-y-4">
+          <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-4">
             <label class="text-xs font-bold text-gray-500 block">📏 排版调节</label>
             <div v-for="(val, key) in configRangeMap" :key="key">
               <div class="flex justify-between mb-1.5">
@@ -233,15 +231,15 @@
             </div>
           </div>
 
-          <div class="bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+          <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
             <label class="text-xs font-bold text-gray-500 block mb-3">📋 页面边距 (mm)</label>
             <div class="grid grid-cols-4 gap-2">
               <div v-for="dir in marginDirections" :key="dir">
                 <span class="block text-[9px] text-gray-400 mb-1 text-center font-bold uppercase">{{ dir }}</span>
                 <input type="number" v-model.number="store.config.margin[dir]"
                   class="w-full border border-gray-200 rounded-lg p-2 text-center text-xs focus:outline-none bg-white"
-                  @focus="$el => $el.target.style.borderColor = store.config.themeColor"
-                  @blur="$el => $el.target.style.borderColor = ''">
+                  @focus="e => e.target.style.borderColor = store.config.themeColor"
+                  @blur="e => e.target.style.borderColor = ''">
               </div>
             </div>
           </div>
