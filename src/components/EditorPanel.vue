@@ -3,6 +3,7 @@
     
     <div class="flex border-b sticky top-0 bg-white z-30 text-sm font-bold text-gray-600 shrink-0">
       <button @click="activeTab = 'content'" class="flex-1 py-4 text-center hover:bg-gray-50 transition-colors" :class="activeTab === 'content' ? 'text-blue-600 border-b-2 border-blue-600' : ''">📝 内容填写</button>
+      <button @click="activeTab = 'template'" class="flex-1 py-4 text-center hover:bg-gray-50 transition-colors" :class="activeTab === 'template' ? 'text-blue-600 border-b-2 border-blue-600' : ''">📐 模板</button>
       <button @click="activeTab = 'global'" class="flex-1 py-4 text-center hover:bg-gray-50 transition-colors" :class="activeTab === 'global' ? 'text-blue-600 border-b-2 border-blue-600' : ''">🎨 全局配置</button>
       <button @click="activeTab = 'module'" class="flex-1 py-4 text-center hover:bg-gray-50 transition-colors" :class="activeTab === 'module' ? 'text-blue-600 border-b-2 border-blue-600' : ''">⚙️ 模块排版</button>
       
@@ -117,25 +118,29 @@
         </div>
       </div>
 
-      <div v-show="activeTab === 'global'" class="p-6 space-y-8 animate-fadeIn pb-32">
-        <!-- 模板选择器 -->
-        <section>
-          <label class="text-xs font-bold text-gray-500 block mb-3">📐 简历模板</label>
-          <div class="grid grid-cols-2 gap-3">
-            <button
-              v-for="tpl in TEMPLATES"
-              :key="tpl.id"
-              @click="switchTemplate(tpl.id)"
-              class="border-2 rounded-xl p-3 text-left transition-all duration-200 hover:shadow-md"
-              :class="store.template === tpl.id ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 bg-white hover:border-blue-200'"
-            >
-              <div class="text-2xl mb-1">{{ tpl.preview }}</div>
-              <div class="font-bold text-xs text-gray-800">{{ tpl.name }}</div>
-              <div class="text-[10px] text-gray-400 mt-0.5">{{ tpl.desc }}</div>
-            </button>
-          </div>
-        </section>
+      <!-- ============ 模板选择标签 ============ -->
+      <div v-show="activeTab === 'template'" class="p-6 animate-fadeIn pb-32">
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">📐 选择简历模板</h3>
+        <p class="text-xs text-gray-400 mb-5">不同模板会改变简历的整体布局和风格，切换后自动调整配色和排版参数。</p>
+        <div class="grid grid-cols-2 gap-4">
+          <button
+            v-for="tpl in TEMPLATES"
+            :key="tpl.id"
+            @click="switchTemplate(tpl.id)"
+            class="border-2 rounded-xl p-5 text-left transition-all duration-200 hover:shadow-lg"
+            :class="store.template === tpl.id ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200' : 'border-gray-200 bg-white hover:border-blue-200'"
+          >
+            <div class="text-4xl mb-3 text-center">{{ tpl.preview }}</div>
+            <div class="font-bold text-sm text-gray-800 text-center">{{ tpl.name }}</div>
+            <div class="text-[11px] text-gray-400 mt-1.5 text-center leading-relaxed">{{ tpl.desc }}</div>
+            <div v-if="store.template === tpl.id" class="mt-3 text-center">
+              <span class="inline-block text-[10px] bg-blue-500 text-white px-3 py-1 rounded-full font-bold">使用中</span>
+            </div>
+          </button>
+        </div>
+      </div>
 
+      <div v-show="activeTab === 'global'" class="p-6 space-y-8 animate-fadeIn pb-32">
         <section class="space-y-6">
           <div>
             <label class="text-xs font-bold text-gray-500 block mb-3">🎨 主题色系统</label>
