@@ -118,6 +118,24 @@
       </div>
 
       <div v-show="activeTab === 'global'" class="p-6 space-y-8 animate-fadeIn pb-32">
+        <!-- 模板选择器 -->
+        <section>
+          <label class="text-xs font-bold text-gray-500 block mb-3">📐 简历模板</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              v-for="tpl in TEMPLATES"
+              :key="tpl.id"
+              @click="switchTemplate(tpl.id)"
+              class="border-2 rounded-xl p-3 text-left transition-all duration-200 hover:shadow-md"
+              :class="store.template === tpl.id ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 bg-white hover:border-blue-200'"
+            >
+              <div class="text-2xl mb-1">{{ tpl.preview }}</div>
+              <div class="font-bold text-xs text-gray-800">{{ tpl.name }}</div>
+              <div class="text-[10px] text-gray-400 mt-0.5">{{ tpl.desc }}</div>
+            </button>
+          </div>
+        </section>
+
         <section class="space-y-6">
           <div>
             <label class="text-xs font-bold text-gray-500 block mb-3">🎨 主题色系统</label>
@@ -176,6 +194,7 @@
 // ✨ 引入了刚编写的导出和导入方法
 import { ref, computed, nextTick } from 'vue'
 import { store, resetDraft, exportDraftToJSON, importDraftFromJSON } from '../store'
+import { TEMPLATES } from '../templates.js'
 
 if (!store.ui) {
   store.ui = { activeTab: 'content', activeModuleId: 'info' }
@@ -432,6 +451,22 @@ const handlePhotoUpload = async (event) => {
 
   store.info.photo = await readFile(file, 'dataUrl')
   event.target.value = ''
+}
+
+const switchTemplate = (templateId) => {
+  store.template = templateId
+  const tpl = TEMPLATES.find(t => t.id === templateId)
+  if (tpl) {
+    Object.assign(store.config, {
+      nameSize: tpl.config.nameSize,
+      titleSize: tpl.config.titleSize,
+      titleFontSize: tpl.config.titleFontSize || 12,
+      bodyFontSize: tpl.config.bodyFontSize,
+      lineHeight: tpl.config.lineHeight,
+      moduleSpacing: tpl.config.moduleSpacing,
+    })
+    store.config.margin = { ...tpl.config.margin }
+  }
 }
 </script>
 

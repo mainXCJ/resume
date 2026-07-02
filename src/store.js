@@ -1,29 +1,28 @@
 import { reactive, watch } from 'vue'
+import { TEMPLATES, getDefaultColor, getThemeOptions } from './templates.js'
 
 const LOCAL_KEY = 'resume_draft_data'
 
 // 将默认状态提取为工厂函数，方便随时对比和重置
 const getDefaultState = () => ({
+    // 0. 模板选择
+    template: 'classic',
+
     // 1. 全局排版配置
     config: {
-        themeColor: '#1A4F85',    
-        fontFamily: 'PingFang',   
-        nameSize: 32,             
-        avatarScale: 1.0,         
-        titleSize: 15,            
-        titleFontSize: 12, 
-        bodyFontSize: 11.5,  
-        lineHeight: 1.1,          
-        moduleSpacing: 5,        
-        margin: { top: 14, bottom: 14, left: 12, right: 12 }, 
+        themeColor: getDefaultColor('classic'),
+        fontFamily: 'PingFang',
+        nameSize: 32,
+        avatarScale: 1.0,
+        titleSize: 15,
+        titleFontSize: 12,
+        bodyFontSize: 11.5,
+        lineHeight: 1.15,
+        moduleSpacing: 6,
+        margin: { top: 14, bottom: 14, left: 13, right: 13 },
     },
-    // 2. 预设主题色选板
-    themeOptions: [
-        { name: '经典商务蓝', value: '#005A9E' },
-        { name: '沉稳藏青色', value: '#1A4F85' },
-        { name: '典雅绛红色', value: '#8A1538' },
-        { name: '曜石纯黑色', value: '#222222' }
-    ],
+    // 2. 预设主题色选板（按模板动态）
+    themeOptions: getThemeOptions('classic'),
     // 3. 界面状态控制
     ui: {
         activeTab: 'content', 
