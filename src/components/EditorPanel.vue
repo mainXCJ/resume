@@ -91,11 +91,11 @@
                   <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '【', '】')" :class="btnClass">【标签】</button>
                   <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '- ', '')" :class="btnClass">• 列表</button>
                   <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '\n| 表头 | 表头 |\n|---|---|\n| 内容 | 内容 |\n', '')" :class="[btnClass, 'text-blue-600 font-bold']">⊞ 表格</button>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '1. ', '')" :class="btnClass">1. 缂栧彿</button>
+                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '1. ', '')" :class="btnClass">1. 编号</button>
                 </div>
 
                 <p class="mb-2 text-[10px] text-gray-400 font-mono">
-                  Tab / Shift+Tab 璋冩暣鍒楄〃灞傜骇锛孍nter 缁х画褰撳墠鍒楄〃
+                  Tab / Shift+Tab 调整列表层级，Enter 继续当前列表
                 </p>
 
                 <textarea 
