@@ -1,4 +1,205 @@
-# Resume Web
+# 📄 MD-Resume Studio
 
-Resume Web is a resume editor built with `Vue 3` and `Vite`.
-It provides a split workspace with editing on the left and live preview on the right, and is designed for resume writing, layout tuning, and A4 print export.
+一款开源的**在线简历编辑器**，支持多模板切换、实时预览、PDF 导出。
+
+> 🎯 纯前端项目，无需后端服务，可直接部署到 GitHub Pages 或任意静态托管平台。
+
+---
+
+## ✨ 功能特性
+
+- **多模板支持** — 内置 4 套精美模板：经典商务蓝、现代侧栏、极简灰、优雅暖棕
+- **实时预览** — 左侧编辑，右侧 A4 纸实时预览，所见即所得
+- **Markdown 编辑** — 支持粗体、斜体、列表、表格、标签等富文本格式
+- **模块化管理** — 教育背景、项目经历、技能证书等模块自由增删、拖拽排序
+- **全局样式调节** — 主题色、字号、行高、间距、页边距等精细控制
+- **PDF 导出** — 一键调用浏览器打印，导出为高质量 A4 PDF
+- **本地草稿保存** — 自动保存至浏览器 localStorage，不怕丢失
+- **JSON 导入/导出** — 可备份和迁移简历数据
+- **GitHub Pages 部署** — 内置 GitHub Actions 工作流，push 即部署
+
+---
+
+## 🚀 快速开始
+
+### 在线使用
+
+直接访问部署好的页面即可：
+
+```
+https://mainXCJ.github.io/resume
+```
+
+### 本地开发
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/mainXCJ/resume.git
+cd resume
+
+# 2. 安装依赖
+npm install
+
+# 3. 启动开发服务器
+npm run dev
+```
+
+打开浏览器访问 `http://localhost:5173` 即可看到简历编辑器。
+
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+构建产物在 `dist/` 目录，可直接部署到任意静态网站托管服务。
+
+---
+
+## 🎨 模板系统
+
+项目内置 4 套简历模板，可在编辑器的 **「📐 模板」** 标签中切换：
+
+| 模板 | 布局 | 风格 |
+|------|------|------|
+| 📋 **经典商务蓝** | 单栏 | 稳重专业，适合传统行业 |
+| 📐 **现代侧栏** | 双栏（左侧彩色侧栏） | 现代简约，适合设计/技术岗 |
+| ◻️ **极简灰** | 单栏居中 | 大量留白，干净克制 |
+| 📄 **优雅暖棕** | 单栏圆角卡片 | 温暖精致，适合创意行业 |
+
+切换模板时，主题色、字号、边距等排版参数会自动适配。
+
+---
+
+## 📁 项目结构
+
+```
+resume_web/
+├── public/
+│   └── fonts/              # 中文字体文件
+├── src/
+│   ├── components/
+│   │   ├── EditorPanel.vue       # 左侧编辑面板
+│   │   ├── PreviewPanel.vue      # 右侧预览面板
+│   │   └── ResumeContentBlock.vue # 简历内容块渲染
+│   ├── App.vue             # 主布局
+│   ├── main.js             # 入口文件
+│   ├── store.js            # 状态管理（响应式数据）
+│   ├── templates.js        # 模板定义配置
+│   └── style.css           # 全局样式
+├── .github/workflows/
+│   └── deploy.yml          # GitHub Pages 自动部署
+├── index.html
+├── package.json
+└── vite.config.js
+```
+
+---
+
+## 📖 使用指南
+
+### 编辑内容
+
+1. 点击 **「📝 内容填写」** 标签
+2. 填写姓名、求职意向、联系方式等基本信息
+3. 点击各模块（教育背景、项目经历等）编辑详细内容
+4. 使用 **「🎨 全局配置」** 调整主题色、字号、行高等
+
+### 排版编辑
+
+编辑器左侧工具栏提供快捷排版按钮：
+- **B** — 加粗 `**文字**`
+- **I** — 斜体 `*文字*`
+- **【标签】** — 高亮标签
+- **• 列表** — 无序列表
+- **⊞ 表格** — 插入表格
+- **1.** — 有序列表
+
+支持 Tab/Shift+Tab 调整列表层级，Enter 自动延续列表。
+
+### 模块管理
+
+在 **「⚙️ 模块排版」** 标签中：
+- 拖拽模块调整顺序
+- 开关控制模块显示/隐藏
+- 控制项目间的分割线
+
+### 导出 PDF
+
+点击顶部 **「📥 导出可编辑 PDF」** 按钮，浏览器会弹出打印窗口，选择「另存为 PDF」即可。
+
+### 数据备份
+
+- **导出配置** — 将当前简历数据导出为 JSON 文件
+- **导入草稿** — 恢复之前保存的 JSON 备份文件
+- **恢复默认** — 清空所有数据，还原为初始模板
+
+---
+
+## 🐳 部署到 GitHub Pages
+
+本项目已配置好 GitHub Actions 自动部署流程：
+
+1. Fork 或推送代码到 GitHub 仓库的 `main` 分支
+2. 在仓库 **Settings → Pages** 中：
+   - Source 选择 **"GitHub Actions"**
+3. 每次推送到 `main` 分支，Actions 会自动构建并部署
+4. 部署完成后访问 `https://<用户名>.github.io/<仓库名>`
+
+---
+
+## 🛠 技术栈
+
+- **Vue 3** — 前端框架
+- **Vite 8** — 构建工具
+- **Tailwind CSS** — 样式框架（CDN）
+- **GitHub Actions** — CI/CD 自动部署
+
+---
+
+## 📝 自定义开发
+
+### 添加新模板
+
+在 `src/templates.js` 中添加模板配置：
+
+```js
+{
+  id: 'my-template',
+  name: '我的模板',
+  desc: '模板描述',
+  preview: '🎨',
+  config: { /* 默认排版参数 */ },
+  cssVars: { /* CSS 变量 */ },
+}
+```
+
+然后在 `src/components/ResumeContentBlock.vue` 中添加对应的 `<template v-if="store.template === 'my-template'">` 渲染逻辑。
+
+### 新增模块
+
+在 `store.js` 的 `modules` 数组中添加：
+
+```js
+{
+  id: 'custom',
+  title: '自定义模块',
+  icon: '',
+  isSingle: false,
+  visible: false,
+  showDivider: false,
+  items: [{ p1: '', p2: '', p3: '', content: '' }]
+}
+```
+
+---
+
+## 📄 许可证
+
+MIT License
+
+---
+
+## 🙌 贡献
+
+欢迎提交 Issue 和 PR！如果这个项目对你有帮助，请给一个 ⭐️
