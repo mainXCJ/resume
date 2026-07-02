@@ -297,6 +297,172 @@
     </div>
   </template>
 
+  <!-- ==================== 时间线式模板 (timeline) ==================== -->
+  <template v-else-if="store.template === 'timeline'">
+    <header v-if="block.type === 'header'"
+      :data-block-id="blockId"
+      class="flex items-stretch gap-4 pb-3 mb-2"
+      :style="{ borderBottom: '2px solid ' + store.config.themeColor }"
+    >
+      <div class="flex-[1.15] flex flex-col justify-between min-w-0">
+        <h1 class="font-bold tracking-wide leading-none"
+          :style="{ color: store.config.themeColor, fontSize: store.config.nameSize + 'px' }">
+          {{ store.info.name }}
+        </h1>
+        <p class="text-gray-700 font-medium mt-1"
+          :style="{ fontSize: (store.config.titleFontSize + 1.5) + 'px' }">
+          {{ store.info.intent }}
+        </p>
+      </div>
+      <div class="min-w-0 text-right text-gray-500 text-xs leading-relaxed"
+        :style="{ fontSize: store.config.titleFontSize + 'px' }">
+        <div v-if="store.info.phone">{{ store.info.phone }}</div>
+        <div v-if="store.info.email">{{ store.info.email }}</div>
+        <div v-if="store.info.degree">{{ store.info.degree }}</div>
+        <div v-if="store.info.location">{{ store.info.location }}</div>
+      </div>
+      <div v-if="store.info.photo" class="w-16 shrink-0">
+        <img :src="store.info.photo" class="w-16 h-16 rounded object-cover"
+          :style="{ transform: `scale(${store.config.avatarScale})` }"
+        />
+      </div>
+    </header>
+
+    <!-- 模块标题 - 时间线风格 -->
+    <div v-else-if="block.type === 'module-title'"
+      :data-block-id="blockId"
+      class="flex items-center gap-3 mb-2 mt-1"
+    >
+      <div class="flex items-center justify-center w-5 h-5 rounded-full shrink-0"
+        :style="{ background: store.config.themeColor }">
+        <span class="text-white text-[10px]">{{ block.mod.icon }}</span>
+      </div>
+      <h2 class="font-bold tracking-wider"
+        :style="{ color: store.config.themeColor, fontSize: store.config.titleSize + 'px' }">
+        {{ block.mod.title }}
+      </h2>
+    </div>
+
+    <!-- 项目标题 - 时间线风格 -->
+    <div v-else-if="block.type === 'item-heading'"
+      :data-block-id="blockId"
+      class="flex items-baseline gap-2 mb-0.5 mt-1 ml-7"
+      :style="{ fontSize: store.config.titleFontSize + 'px' }"
+    >
+      <div class="w-2 h-2 rounded-full shrink-0"
+        :style="{ background: store.config.themeColor }"></div>
+      <span class="font-bold text-gray-800">{{ block.item.p1 }}</span>
+      <span class="text-gray-500">{{ block.item.p2 }}</span>
+      <span class="text-gray-400 ml-auto text-xs">{{ block.item.p3 }}</span>
+    </div>
+
+    <div v-else-if="block.type === 'item-content'"
+      :data-block-id="blockId"
+      class="text-gray-700 ml-7 pl-4"
+      :style="{
+        fontSize: store.config.bodyFontSize + 'px',
+        borderLeft: '1.5px solid ' + store.config.themeColor + '33',
+      }"
+      v-html="renderRichText(block.content)"
+    ></div>
+
+    <div v-else-if="block.type === 'spacing'"
+      :data-block-id="blockId"
+      :style="{ height: block.height + 'px' }"
+    ></div>
+
+    <div v-else :data-block-id="blockId" class="last:mb-0" :style="{ marginBottom: block.marginBottom + 'px' }">
+      <div v-if="!block.mod.isSingle && (block.item.p1 || block.item.p2 || block.item.p3)"
+        class="flex items-baseline gap-2 mb-0.5 ml-7"
+        :style="{ fontSize: store.config.titleFontSize + 'px' }">
+        <div class="w-2 h-2 rounded-full shrink-0"
+          :style="{ background: store.config.themeColor }"></div>
+        <span class="font-bold text-gray-800">{{ block.item.p1 }}</span>
+        <span class="text-gray-500">{{ block.item.p2 }}</span>
+        <span class="text-gray-400 ml-auto text-xs">{{ block.item.p3 }}</span>
+      </div>
+      <div class="text-gray-700 ml-7 pl-4"
+        :style="{
+          fontSize: store.config.bodyFontSize + 'px',
+          borderLeft: '1.5px solid ' + store.config.themeColor + '33',
+        }"
+        v-html="renderRichText(block.item.content)"></div>
+    </div>
+  </template>
+
+  <!-- ==================== 紧凑资讯模板 (compact) ==================== -->
+  <template v-else-if="store.template === 'compact'">
+    <header v-if="block.type === 'header'"
+      :data-block-id="blockId"
+      class="pb-2 mb-2"
+      :style="{ borderBottom: '1px solid ' + store.config.themeColor }"
+    >
+      <div class="flex items-end justify-between">
+        <h1 class="font-bold tracking-tight"
+          :style="{ color: store.config.themeColor, fontSize: store.config.nameSize + 'px' }">
+          {{ store.info.name }}
+        </h1>
+        <p class="text-gray-600 font-medium"
+          :style="{ fontSize: (store.config.titleFontSize + 1) + 'px' }">
+          {{ store.info.intent }}
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-gray-500 text-[10px]">
+        <span v-if="store.info.phone">📞 {{ store.info.phone }}</span>
+        <span v-if="store.info.email">✉️ {{ store.info.email }}</span>
+        <span v-if="store.info.degree">🎓 {{ store.info.degree }}</span>
+        <span v-if="store.info.location">📍 {{ store.info.location }}</span>
+        <span v-if="store.info.github">🔗 {{ store.info.github }}</span>
+      </div>
+    </header>
+
+    <div v-else-if="block.type === 'module-title'"
+      :data-block-id="blockId"
+      class="font-bold text-xs tracking-wider mb-1 mt-1"
+      :style="{
+        color: '#fff',
+        background: store.config.themeColor,
+        padding: '3px 8px',
+        borderRadius: '2px',
+      }">
+      {{ block.mod.title }}
+    </div>
+
+    <div v-else-if="block.type === 'item-heading'"
+      :data-block-id="blockId"
+      class="flex items-baseline gap-2 text-gray-800"
+      :style="{ fontSize: store.config.titleFontSize + 'px' }"
+    >
+      <span class="font-bold">{{ block.item.p1 }}</span>
+      <span class="text-gray-500 text-xs">{{ block.item.p2 }}</span>
+      <span class="text-gray-400 text-[10px] ml-auto">{{ block.item.p3 }}</span>
+    </div>
+
+    <div v-else-if="block.type === 'item-content'"
+      :data-block-id="blockId"
+      class="text-gray-700"
+      :style="{ fontSize: store.config.bodyFontSize + 'px' }"
+      v-html="renderRichText(block.content)"
+    ></div>
+
+    <div v-else-if="block.type === 'spacing'"
+      :data-block-id="blockId"
+      :style="{ height: block.height + 'px' }"
+    ></div>
+
+    <div v-else :data-block-id="blockId" class="last:mb-0" :style="{ marginBottom: block.marginBottom + 'px' }">
+      <div v-if="!block.mod.isSingle && (block.item.p1 || block.item.p2 || block.item.p3)"
+        class="flex items-baseline gap-2"
+        :style="{ fontSize: store.config.titleFontSize + 'px' }">
+        <span class="font-bold text-gray-800">{{ block.item.p1 }}</span>
+        <span class="text-gray-500 text-xs">{{ block.item.p2 }}</span>
+        <span class="text-gray-400 text-[10px] ml-auto">{{ block.item.p3 }}</span>
+      </div>
+      <div class="text-gray-700" :style="{ fontSize: store.config.bodyFontSize + 'px' }"
+        v-html="renderRichText(block.item.content)"></div>
+    </div>
+  </template>
+
   <!-- ==================== 经典模板 (classic) - 默认 ==================== -->
   <template v-else>
     <header

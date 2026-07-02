@@ -135,6 +135,70 @@ export const TEMPLATES = [
       '--module-title-padding': '0',
       '--module-title-radius': '0',
     }
+  },
+  {
+    id: 'timeline',
+    name: '时间线式',
+    desc: '左侧时间轴线，经历按时间流畅展示',
+    preview: '⏳',
+    config: {
+      nameSize: 30,
+      titleSize: 14,
+      bodyFontSize: 11,
+      lineHeight: 1.2,
+      moduleSpacing: 6,
+      margin: { top: 14, bottom: 14, left: 16, right: 13 },
+    },
+    cssVars: {
+      '--section-border-style': 'none',
+      '--section-border-width': '0',
+      '--section-border-color': 'transparent',
+      '--header-layout': 'row',
+      '--header-align': 'stretch',
+      '--contact-style': 'badge',
+      '--module-title-style': 'timeline',
+      '--item-heading-style': 'timeline',
+      '--avatar-border-radius': '12px',
+      '--body-text-align': 'left',
+      '--divider-style': 'none',
+      '--name-font-weight': '700',
+      '--page-bg': '#ffffff',
+      '--module-title-bg': 'transparent',
+      '--module-title-padding': '0',
+      '--module-title-radius': '0',
+    }
+  },
+  {
+    id: 'compact',
+    name: '紧凑资讯',
+    desc: '信息密度高，双列技能栏，适合资深人士',
+    preview: '📊',
+    config: {
+      nameSize: 28,
+      titleSize: 13,
+      bodyFontSize: 10.5,
+      lineHeight: 1.1,
+      moduleSpacing: 4,
+      margin: { top: 12, bottom: 12, left: 12, right: 12 },
+    },
+    cssVars: {
+      '--section-border-style': 'solid',
+      '--section-border-width': '0.5px',
+      '--section-border-color': '#ccc',
+      '--header-layout': 'row',
+      '--header-align': 'stretch',
+      '--contact-style': 'inline',
+      '--module-title-style': 'compact-bar',
+      '--item-heading-style': 'inline',
+      '--avatar-border-radius': '4px',
+      '--body-text-align': 'left',
+      '--divider-style': 'none',
+      '--name-font-weight': '700',
+      '--page-bg': '#ffffff',
+      '--module-title-bg': '#f5f5f5',
+      '--module-title-padding': '3px 8px',
+      '--module-title-radius': '2px',
+    }
   }
 ]
 
@@ -146,7 +210,9 @@ export const getDefaultColor = (templateId) => {
     classic: '#005A9E',
     sidebar: '#2D3748',
     minimal: '#333333',
-    elegant: '#8B6B4A'
+    elegant: '#8B6B4A',
+    timeline: '#2563EB',
+    compact: '#4A5568'
   }
   return colors[templateId] || '#005A9E'
 }
@@ -179,6 +245,18 @@ export const getThemeOptions = (templateId) => {
       { name: '陶土红', value: '#C17A5A' },
       { name: '橄榄绿', value: '#6B8E5A' },
       { name: '雾霾蓝', value: '#6B8E9E' },
+    ],
+    timeline: [
+      { name: '明亮蓝', value: '#2563EB' },
+      { name: '翠绿色', value: '#059669' },
+      { name: '珊瑚红', value: '#DC2626' },
+      { name: '深紫色', value: '#7C3AED' },
+    ],
+    compact: [
+      { name: '石板灰', value: '#4A5568' },
+      { name: '深海蓝', value: '#2B6CB0' },
+      { name: '石墨黑', value: '#2D3748' },
+      { name: '灰褐色', value: '#6B7280' },
     ],
   }
   return palettes[templateId] || palettes.classic
