@@ -174,7 +174,12 @@ const getInitialState = () => {
     const saved = localStorage.getItem(LOCAL_KEY);
     if (saved) {
         try {
-            return JSON.parse(saved);
+            const parsed = JSON.parse(saved);
+            // 确保新版本字段存在（兼容旧数据迁移）
+            const defaults = getDefaultState();
+            if (!parsed.template) parsed.template = defaults.template;
+            if (!parsed.themeOptions) parsed.themeOptions = defaults.themeOptions;
+            return parsed;
         } catch (e) {
             console.error('解析草稿失败，加载默认模板', e);
         }
