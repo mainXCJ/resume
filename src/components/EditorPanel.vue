@@ -3,7 +3,7 @@
 
     <div class="flex border-b bg-white sticky top-0 z-30 shrink-0">
       <button @click="activeTab = 'content'" class="flex-1 py-3.5 text-center text-xs font-bold transition-all relative"
-        :class="activeTab === 'content' ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'">
+        :class="activeTab === 'content' ? 'text-gray-800' : 'text-gray-500 hover:text-gray-700'">
         <span class="flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           编辑内容
@@ -12,7 +12,7 @@
           :style="{ background: store.config.themeColor }"></div>
       </button>
       <button @click="activeTab = 'template'" class="flex-1 py-3.5 text-center text-xs font-bold transition-all relative"
-        :class="activeTab === 'template' ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'">
+        :class="activeTab === 'template' ? 'text-gray-800' : 'text-gray-500 hover:text-gray-700'">
         <span class="flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
           模板
@@ -21,7 +21,7 @@
           :style="{ background: store.config.themeColor }"></div>
       </button>
       <button @click="activeTab = 'global'" class="flex-1 py-3.5 text-center text-xs font-bold transition-all relative"
-        :class="activeTab === 'global' ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'">
+        :class="activeTab === 'global' ? 'text-gray-800' : 'text-gray-500 hover:text-gray-700'">
         <span class="flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
           样式
@@ -30,7 +30,7 @@
           :style="{ background: store.config.themeColor }"></div>
       </button>
       <button @click="activeTab = 'module'" class="flex-1 py-3.5 text-center text-xs font-bold transition-all relative"
-        :class="activeTab === 'module' ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'">
+        :class="activeTab === 'module' ? 'text-gray-800' : 'text-gray-500 hover:text-gray-700'">
         <span class="flex items-center justify-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
           模块
@@ -63,7 +63,7 @@
         <div class="flex flex-wrap border-b bg-white sticky top-0 z-20 px-3 py-2 gap-1 shrink-0">
           <button @click="activeSubTab = 'info'"
             class="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5"
-            :class="activeSubTab === 'info' ? 'shadow-sm border' : 'text-gray-400 hover:text-gray-600'"
+            :class="activeSubTab === 'info' ? 'shadow-sm border' : 'text-gray-500 hover:text-gray-700'"
             :style="activeSubTab === 'info' ? { color: store.config.themeColor, borderColor: store.config.themeColor + '33', background: store.config.themeColor + '08' } : {}">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             基本信息
@@ -72,7 +72,7 @@
           <button v-for="mod in store.modules" :key="mod.id"
             @click="activeSubTab = mod.id"
             class="px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5"
-            :class="activeSubTab === mod.id ? 'shadow-sm border' : 'text-gray-400 hover:text-gray-600'"
+            :class="activeSubTab === mod.id ? 'shadow-sm border' : 'text-gray-500 hover:text-gray-700'"
             :style="activeSubTab === mod.id ? { color: store.config.themeColor, borderColor: store.config.themeColor + '33', background: store.config.themeColor + '08' } : {}">
             <span v-if="!mod.visible" class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
             <span class="icon text-xs">{{ mod.icon }}</span>
@@ -82,13 +82,13 @@
 
         <div class="p-5 flex-1 pb-32">
           <div v-if="activeSubTab === 'info'" class="space-y-5 animate-fadeIn">
-            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
               个人资料
             </h3>
             <div class="grid grid-cols-2 gap-3">
               <div v-for="(label, key) in infoFieldMap" :key="key">
-                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1.5 block">{{ label }}</label>
+                <label class="text-[10px] font-bold text-gray-500 uppercase mb-1.5 block">{{ label }}</label>
                 <input v-model="store.info[key]"
                   class="w-full border border-gray-200 bg-white px-3 py-2.5 rounded-lg text-sm focus:outline-none transition-all shadow-sm"
                   @focus="e => e.target.style.borderColor = store.config.themeColor"
@@ -97,7 +97,7 @@
               <div class="col-span-2 border border-dashed border-gray-200 rounded-xl p-4 bg-white flex flex-col gap-3 mt-1">
                 <label class="text-xs text-gray-500 font-bold flex items-center gap-2">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                  证件照 <span class="font-normal text-[10px] text-gray-400">(建议一寸蓝底/白底)</span>
+                  证件照 <span class="font-normal text-[10px] text-gray-500">(建议一寸蓝底/白底)</span>
                 </label>
                 <div class="flex items-center justify-between bg-white px-3 py-2.5 rounded-lg border border-gray-100">
                   <input type="file" accept="image/*" @change="handlePhotoUpload" class="text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:cursor-pointer"
@@ -174,11 +174,11 @@
 
       <!-- ============ 模板选择标签 ============ -->
       <div v-show="activeTab === 'template'" class="p-5 animate-fadeIn pb-32">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+        <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1 flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
           选择模板
         </h3>
-        <p class="text-[11px] text-gray-400 mb-4 ml-6">切换模板会自动调整配色和排版参数，简历内容不受影响。</p>
+        <p class="text-[11px] text-gray-500 mb-4 ml-6">切换模板会自动调整配色和排版参数</p>
         <div class="grid grid-cols-2 gap-3">
           <button
             v-for="tpl in TEMPLATES"
@@ -195,13 +195,13 @@
                 :style="{ background: store.config.themeColor }">使用中</span>
             </div>
             <div class="font-bold text-sm text-gray-800">{{ tpl.name }}</div>
-            <div class="text-[10px] text-gray-400 mt-0.5 leading-relaxed">{{ tpl.desc }}</div>
+            <div class="text-[10px] text-gray-500 mt-0.5 leading-relaxed">{{ tpl.desc }}</div>
           </button>
         </div>
       </div>
 
       <div v-show="activeTab === 'global'" class="p-5 animate-fadeIn pb-32">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-4 flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
           全局样式
         </h3>
@@ -235,7 +235,7 @@
             <label class="text-xs font-bold text-gray-500 block mb-3">📋 页面边距 (mm)</label>
             <div class="grid grid-cols-4 gap-2">
               <div v-for="dir in marginDirections" :key="dir">
-                <span class="block text-[9px] text-gray-400 mb-1 text-center font-bold uppercase">{{ dir }}</span>
+                <span class="block text-[9px] text-gray-500 mb-1 text-center font-bold uppercase">{{ dir }}</span>
                 <input type="number" v-model.number="store.config.margin[dir]"
                   class="w-full border border-gray-200 rounded-lg p-2 text-center text-xs focus:outline-none bg-white"
                   @focus="e => e.target.style.borderColor = store.config.themeColor"
@@ -247,11 +247,11 @@
       </div>
 
       <div v-show="activeTab === 'module'" class="p-5 animate-fadeIn pb-32">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-4 flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
           模块排版
         </h3>
-        <p class="text-[11px] text-gray-400 mb-4 ml-6">拖拽排序 · 切换显示/隐藏</p>
+        <p class="text-[11px] text-gray-500 mb-4 ml-6">拖拽排序 · 切换显示/隐藏</p>
         <div class="space-y-2">
           <div v-for="(mod, index) in store.modules" :key="mod.id"
             class="border rounded-xl px-4 py-3 bg-white shadow-sm flex items-center justify-between transition-all duration-200"
@@ -263,7 +263,7 @@
               <span class="font-bold text-sm" :class="mod.visible ? 'text-gray-700' : 'text-gray-300'">{{ mod.title }}</span>
             </div>
             <div class="flex items-center gap-3">
-              <div v-if="mod.visible && !mod.isSingle" class="flex items-center gap-1.5 text-[10px] text-gray-400">
+              <div v-if="mod.visible && !mod.isSingle" class="flex items-center gap-1.5 text-[10px] text-gray-500">
                 <span>分割线</span>
                 <input type="checkbox" v-model="mod.showDivider" class="cursor-pointer accent-blue-600 w-3.5 h-3.5">
               </div>
