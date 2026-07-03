@@ -52,10 +52,18 @@
           <input type="file" accept=".json" class="hidden" @change="handleImportJSON" />
         </label>
         <label class="cursor-pointer text-[10px] font-bold px-2 py-1.5 rounded-lg transition-all flex items-center gap-1"
-          :style="{ color: store.config.themeColor, background: store.config.themeColor + '12' }">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-          简历
-          <input type="file" accept=".docx,.pdf,.txt" class="hidden" @change="handleImportFile" />
+          :style="{
+            color: importing ? '#999' : store.config.themeColor,
+            background: importing ? '#f5f5f5' : store.config.themeColor + '12',
+            pointerEvents: importing ? 'none' : 'auto'
+          }">
+          <svg v-if="importing" class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+          <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          {{ importing ? '解析中…' : '简历' }}
+          <input type="file" accept=".docx,.pdf,.txt" class="hidden" @change="handleImportFile" :disabled="importing" />
         </label>
         <button @click="resetDraft" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all text-gray-400 hover:text-red-500 hover:bg-red-50 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -294,6 +302,8 @@ import { store, resetDraft, exportDraftToJSON, importDraftFromJSON } from '../st
 import { TEMPLATES } from '../templates.js'
 import { extractTextFromFile, parseResumeText, applyParsedData } from '../importer.js'
 
+const importing = ref(false)
+
 if (!store.ui) {
   store.ui = { activeTab: 'content', activeModuleId: 'info' }
 }
@@ -374,23 +384,36 @@ const handleImportFile = async (event) => {
   if (!file) return
   event.target.value = ''
 
-  try {
-    // 提取文本
-    const text = await extractTextFromFile(file)
-    if (!text) return
+  importing.value = true
 
-    // 解析
+  try {
+    // 第一步：提取文本
+    const text = await extractTextFromFile(file)
+    if (!text) { importing.value = false; return }
+
+    // 第二步：解析
     const parsed = parseResumeText(text)
     if (!parsed || (!parsed.info.name && !parsed.sections.length)) {
-      alert('未能从文件中识别出简历内容，请确认文件格式正确。')
+      importing.value = false
+      alert('未能从文件中识别出简历内容，请确认文件格式正确。\n\n提示：目前支持解析有明确分段的简历（教育背景、工作经历等标题）。')
       return
     }
 
-    // 应用到 store
-    applyParsedData(store, parsed)
+    // 第三步：确认是否覆盖已有数据
+    const hasExistingData = store.info.name && store.info.name !== '某某'
+    if (hasExistingData) {
+      const confirmed = confirm('检测到简历已有内容，导入将覆盖现有数据。是否继续？')
+      if (!confirmed) { importing.value = false; return }
+    }
+
+    // 第四步：应用到 store（覆盖模式）
+    applyParsedData(store, parsed, true)
+    importing.value = false
+    alert('✅ 导入成功！页面即将刷新以应用数据。')
     window.location.reload()
   } catch (e) {
-    alert('导入失败：' + e.message)
+    importing.value = false
+    alert('导入失败：' + e.message + '\n\n提示：请确保文件内容为简历文本格式。')
   }
 }
 

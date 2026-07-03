@@ -29,6 +29,15 @@ body {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* 旋转动画 */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 /* 🖨️ 打印终极防转曲 (Type-3) 补丁 */
 /* --- 打印模式终极重置 --- */
 @media print {
