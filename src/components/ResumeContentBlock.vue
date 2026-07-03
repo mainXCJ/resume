@@ -554,6 +554,21 @@
       :style="{ height: block.height + 'px' }"
     ></div>
 
+    <div v-else-if="block.type === 'table-row'"
+      :data-block-id="blockId"
+      class="grid w-full text-gray-700"
+      :style="{
+        gridTemplateColumns: `repeat(${block.cells.length || 1}, minmax(0, 1fr))`,
+        fontSize: store.config.bodyFontSize + 'px'
+      }"
+    >
+      <div v-for="(cell, cellIndex) in block.cells"
+        :key="`${blockId}-cell-${cellIndex}`"
+        class="border border-gray-300 px-2 py-1"
+        v-html="renderRichText(cell)"
+      ></div>
+    </div>
+
     <div v-else :data-block-id="blockId" class="last:mb-0" :style="{ marginBottom: block.marginBottom + 'px' }">
       <div v-if="!block.mod.isSingle && (block.item.p1 || block.item.p2 || block.item.p3)"
         class="flex justify-between font-bold text-gray-800 mb-0.5"
@@ -638,6 +653,21 @@
       :style="{ height: block.height + 'px' }"
     ></div>
 
+    <div v-else-if="block.type === 'table-row'"
+      :data-block-id="blockId"
+      class="grid w-full text-gray-700"
+      :style="{
+        gridTemplateColumns: `repeat(${block.cells.length || 1}, minmax(0, 1fr))`,
+        fontSize: store.config.bodyFontSize + 'px'
+      }"
+    >
+      <div v-for="(cell, cellIndex) in block.cells"
+        :key="`${blockId}-cell-${cellIndex}`"
+        class="border border-gray-300 px-2 py-1"
+        v-html="renderRichText(cell)"
+      ></div>
+    </div>
+
     <div v-else :data-block-id="blockId" class="last:mb-0" :style="{ marginBottom: block.marginBottom + 'px' }">
       <div v-if="!block.mod.isSingle && (block.item.p1 || block.item.p2 || block.item.p3)"
         class="flex justify-between font-bold mb-0.5"
@@ -709,6 +739,21 @@
       :data-block-id="blockId"
       :style="{ height: block.height + 'px' }"
     ></div>
+
+    <div v-else-if="block.type === 'table-row'"
+      :data-block-id="blockId"
+      class="grid w-full text-gray-700"
+      :style="{
+        gridTemplateColumns: `repeat(${block.cells.length || 1}, minmax(0, 1fr))`,
+        fontSize: store.config.bodyFontSize + 'px'
+      }"
+    >
+      <div v-for="(cell, cellIndex) in block.cells"
+        :key="`${blockId}-cell-${cellIndex}`"
+        class="border border-gray-300 px-2 py-1"
+        v-html="renderRichText(cell)"
+      ></div>
+    </div>
 
     <div v-else :data-block-id="blockId" class="last:mb-0" :style="{ marginBottom: block.marginBottom + 'px' }">
       <div v-if="!block.mod.isSingle && (block.item.p1 || block.item.p2 || block.item.p3)"
@@ -793,6 +838,21 @@
       :data-block-id="blockId"
       :style="{ height: block.height + 'px' }"
     ></div>
+
+    <div v-else-if="block.type === 'table-row'"
+      :data-block-id="blockId"
+      class="grid w-full text-gray-700"
+      :style="{
+        gridTemplateColumns: `repeat(${block.cells.length || 1}, minmax(0, 1fr))`,
+        fontSize: store.config.bodyFontSize + 'px'
+      }"
+    >
+      <div v-for="(cell, cellIndex) in block.cells"
+        :key="`${blockId}-cell-${cellIndex}`"
+        class="border border-gray-300 px-2 py-1"
+        v-html="renderRichText(cell)"
+      ></div>
+    </div>
 
     <div v-else :data-block-id="blockId" class="last:mb-0" :style="{ marginBottom: block.marginBottom + 'px' }">
       <div v-if="!block.mod.isSingle && (block.item.p1 || block.item.p2 || block.item.p3)"
