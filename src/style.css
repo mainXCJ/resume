@@ -1,11 +1,8 @@
-/* 1. 注册屏幕预览字体 */
-@font-face {
-  font-family: 'ResumeFont';
-  src: url('/fonts/PingFangSC-Regular.ttf') format('truetype');
-  font-weight: normal;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* 2. 注册图标字体 (FontAwesome) */
+/* 图标字体 */
 @font-face {
   font-family: 'FontAwesome';
   src: url('/fonts/fa-solid-900.ttf') format('truetype');
@@ -22,10 +19,9 @@
 
 /* 屏幕显示基准 */
 body {
-  font-family: 'ResumeFont', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Microsoft YaHei', 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-* { font-synthesis: none !important; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 

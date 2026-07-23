@@ -40,7 +40,7 @@
       </button>
 
       <div class="flex items-center gap-1.5 px-3 border-l bg-gray-50 shrink-0">
-        <button @click="exportDraftToJSON" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1"
+        <button type="button" @click="exportDraftToJSON" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1"
           :style="{ color: store.config.themeColor, background: store.config.themeColor + '12' }">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           导出
@@ -65,7 +65,13 @@
           {{ importing ? '解析中…' : '简历' }}
           <input type="file" accept=".docx,.pdf,.txt" class="hidden" @change="handleImportFile" :disabled="importing" />
         </label>
-        <button @click="resetDraft" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all text-gray-400 hover:text-red-500 hover:bg-red-50 flex items-center gap-1">
+        <button
+          type="button"
+          aria-label="清空并重置简历"
+          title="清空并重置简历"
+          @click="resetDraft"
+          class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all text-gray-400 hover:text-red-500 hover:bg-red-50 flex items-center gap-1"
+        >
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         </button>
       </div>
@@ -102,19 +108,19 @@
             </h3>
             <div class="grid grid-cols-2 gap-3">
               <div v-for="(label, key) in infoFieldMap" :key="key">
-                <label class="text-[10px] font-bold text-gray-500 uppercase mb-1.5 block">{{ label }}</label>
-                <input v-model="store.info[key]"
+                <label :for="`info-${key}`" class="text-[10px] font-bold text-gray-500 uppercase mb-1.5 block">{{ label }}</label>
+                <input :id="`info-${key}`" :name="`resume-${key}`" v-model="store.info[key]"
                   class="w-full border border-gray-200 bg-white px-3 py-2.5 rounded-lg text-sm focus:outline-none transition-all shadow-sm"
-                  @focus="e => e.target.style.borderColor = store.config.themeColor"
-                  @blur="e => e.target.style.borderColor = ''">
+                  @focus="$event.target.style.borderColor = store.config.themeColor"
+                  @blur="$event.target.style.borderColor = ''">
               </div>
               <div class="col-span-2 border border-dashed border-gray-200 rounded-xl p-4 bg-white flex flex-col gap-3 mt-1">
-                <label class="text-xs text-gray-500 font-bold flex items-center gap-2">
+                <label for="resume-photo" class="text-xs text-gray-500 font-bold flex items-center gap-2">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                   证件照 <span class="font-normal text-[10px] text-gray-500">(建议一寸蓝底/白底)</span>
                 </label>
                 <div class="flex items-center justify-between bg-white px-3 py-2.5 rounded-lg border border-gray-100">
-                  <input type="file" accept="image/*" @change="handlePhotoUpload" class="text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:cursor-pointer"
+                  <input id="resume-photo" name="resume-photo" type="file" accept="image/*" @change="handlePhotoUpload" class="text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:cursor-pointer"
                     :style="{ '--file-color': store.config.themeColor }">
                   <button v-if="store.info.photo" @click="store.info.photo = ''" class="text-xs font-bold px-2.5 py-1 rounded-lg transition-colors text-red-500 hover:bg-red-50">移除</button>
                 </div>
@@ -135,31 +141,38 @@
                   </p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" v-model="mod.visible" class="sr-only peer">
+                  <input type="checkbox" v-model="mod.visible" class="sr-only peer" :aria-label="`${mod.title}显示状态`">
                   <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"
                     :class="`peer-checked:bg-[${store.config.themeColor}]`"></div>
                 </label>
               </div>
 
               <div v-for="(item, iIdx) in mod.items" :key="iIdx" class="bg-white p-4 rounded-xl border border-gray-100 mb-4 relative group shadow-sm hover:shadow-md transition-shadow">
-                <button v-if="!mod.isSingle" @click="mod.items.splice(iIdx, 1)" class="absolute -top-2 -right-2 bg-white border border-red-200 text-red-500 rounded-full w-6 h-6 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 font-bold text-lg hover:bg-red-50">×</button>
+                <button
+                  v-if="!mod.isSingle"
+                  type="button"
+                  :aria-label="`删除${mod.title}第 ${iIdx + 1} 项`"
+                  :title="`删除${mod.title}第 ${iIdx + 1} 项`"
+                  @click="mod.items.splice(iIdx, 1)"
+                  class="absolute -top-2 -right-2 bg-white border border-red-200 text-red-500 rounded-full w-6 h-6 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all z-10 font-bold text-lg hover:bg-red-50"
+                >×</button>
 
                 <div v-if="!mod.isSingle" class="grid grid-cols-3 gap-2.5 mb-3">
-                  <input v-model="item.p1" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="主标题 (学校/公司)">
-                  <input v-model="item.p2" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="副标题 (专业/职位)">
-                  <input v-model="item.p3" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="时间周期">
+                  <input v-model="item.p1" :aria-label="`${mod.title}第 ${iIdx + 1} 项主标题`" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="主标题 (学校/公司)">
+                  <input v-model="item.p2" :aria-label="`${mod.title}第 ${iIdx + 1} 项副标题`" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="副标题 (专业/职位)">
+                  <input v-model="item.p3" :aria-label="`${mod.title}第 ${iIdx + 1} 项时间周期`" class="border border-gray-200 bg-white px-2.5 py-2 rounded-lg text-xs focus:outline-none transition-all shadow-sm" placeholder="时间周期">
                 </div>
 
                 <div class="flex items-center gap-0.5 mb-2 bg-white p-1 rounded-lg border border-gray-100 shadow-sm">
-                  <button @click="handleUndo('txt-'+mod.id+'-'+iIdx)" title="撤回" class="px-2 py-1 hover:bg-white rounded text-[10px] font-medium transition-colors text-gray-500">↶</button>
-                  <button @click="handleRedo('txt-'+mod.id+'-'+iIdx)" title="重做" class="px-2 py-1 hover:bg-white rounded text-[10px] font-medium transition-colors text-gray-500">↷</button>
+                  <button type="button" @click="handleUndo('txt-'+mod.id+'-'+iIdx)" title="撤回" aria-label="撤回" class="px-2 py-1 hover:bg-white rounded text-[10px] font-medium transition-colors text-gray-500">↶</button>
+                  <button type="button" @click="handleRedo('txt-'+mod.id+'-'+iIdx)" title="重做" aria-label="重做" class="px-2 py-1 hover:bg-white rounded text-[10px] font-medium transition-colors text-gray-500">↷</button>
                   <div class="w-px h-4 bg-gray-300 mx-0.5"></div>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '**', '**')" class="px-2 py-1 hover:bg-white rounded text-[10px] font-bold transition-colors text-gray-600">B</button>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '*', '*')" class="px-2 py-1 hover:bg-white rounded text-[10px] italic font-serif transition-colors text-gray-600">I</button>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '【', '】')" class="px-2 py-1 hover:bg-white rounded text-[10px] transition-colors text-gray-500">【】</button>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '- ', '')" class="px-2 py-1 hover:bg-white rounded text-[10px] transition-colors text-gray-500">•</button>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '\n| 表头 | 表头 |\n|---|---|\n| 内容 | 内容 |\n', '')" class="px-2 py-1 hover:bg-white rounded text-[10px] font-bold transition-colors text-gray-500">⊞</button>
-                  <button @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '1. ', '')" class="px-2 py-1 hover:bg-white rounded text-[10px] transition-colors text-gray-500">1.</button>
+                  <button type="button" aria-label="加粗" title="加粗" @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '**', '**')" class="px-2 py-1 hover:bg-white rounded text-[10px] font-bold transition-colors text-gray-600">B</button>
+                  <button type="button" aria-label="斜体" title="斜体" @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '*', '*')" class="px-2 py-1 hover:bg-white rounded text-[10px] italic font-serif transition-colors text-gray-600">I</button>
+                  <button type="button" aria-label="插入重点标签" title="插入重点标签" @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '【', '】')" class="px-2 py-1 hover:bg-white rounded text-[10px] transition-colors text-gray-500">【】</button>
+                  <button type="button" aria-label="插入无序列表" title="插入无序列表" @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '- ', '')" class="px-2 py-1 hover:bg-white rounded text-[10px] transition-colors text-gray-500">•</button>
+                  <button type="button" aria-label="插入表格" title="插入表格" @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '\n| 表头 | 表头 |\n|---|---|\n| 内容 | 内容 |\n', '')" class="px-2 py-1 hover:bg-white rounded text-[10px] font-bold transition-colors text-gray-500">⊞</button>
+                  <button type="button" aria-label="插入有序列表" title="插入有序列表" @click="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '1. ', '')" class="px-2 py-1 hover:bg-white rounded text-[10px] transition-colors text-gray-500">1.</button>
                 </div>
 
                 <p class="mb-2 text-[9px] text-gray-300 font-mono">Tab 缩进 · Shift+Tab 减少缩进 · Enter 继续列表 · Ctrl+B 加粗 · Ctrl+I 斜体</p>
@@ -172,6 +185,7 @@
                   @keydown.ctrl.i.prevent="insertMarkdown('txt-'+mod.id+'-'+iIdx, item, '*', '*')"
                   @keydown.enter="enhancedHandleEnterKey($event, 'txt-'+mod.id+'-'+iIdx, item)"
                   class="w-full border border-gray-200 bg-white p-3 rounded-lg text-xs h-44 focus:outline-none transition-all shadow-sm font-mono leading-relaxed resize-vertical"
+                  :aria-label="`${mod.title}第 ${iIdx + 1} 项正文`"
                   placeholder="支持 Markdown 语法...&#10;&#10;例:&#10;- 负责某某系统的设计与开发&#10;- 使用 **技术栈** 实现了某某功能&#10;1. 第一步&#10;2. 第二步"
                 ></textarea>
               </div>
@@ -224,12 +238,12 @@
           <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
             <label class="text-xs font-bold text-gray-500 block mb-3">🎨 主题色</label>
             <div class="flex gap-3 items-center">
-              <button v-for="color in store.themeOptions" :key="color.value" @click="store.config.themeColor = color.value"
+              <button v-for="color in store.themeOptions" :key="color.value" type="button" :aria-label="`选择主题色 ${color.name || color.value}`" :title="color.name || color.value" @click="store.config.themeColor = color.value"
                 :style="{ backgroundColor: color.value }"
                 class="w-7 h-7 rounded-full border-2 transition-all hover:scale-110 shadow-sm"
                 :class="store.config.themeColor === color.value ? 'border-gray-800 scale-110 ring-2 ring-offset-2' : 'border-transparent'">
               </button>
-              <input type="color" v-model="store.config.themeColor" class="w-7 h-7 p-0 border-0 rounded cursor-pointer">
+              <input type="color" v-model="store.config.themeColor" aria-label="自定义主题色" title="自定义主题色" class="w-7 h-7 p-0 border-0 rounded cursor-pointer">
             </div>
           </div>
 
@@ -237,10 +251,10 @@
             <label class="text-xs font-bold text-gray-500 block">📏 排版调节</label>
             <div v-for="(val, key) in configRangeMap" :key="key">
               <div class="flex justify-between mb-1.5">
-                <label class="text-[11px] text-gray-500">{{ val.label }}</label>
+                <label :for="`config-${key}`" class="text-[11px] text-gray-500">{{ val.label }}</label>
                 <span class="text-[11px] font-mono font-bold" :style="{ color: store.config.themeColor }">{{ store.config[key] }}{{ val.unit }}</span>
               </div>
-              <input type="range" v-model.number="store.config[key]" :min="val.min" :max="val.max" :step="val.step" class="w-full accent-blue-600 h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+              <input :id="`config-${key}`" type="range" v-model.number="store.config[key]" :min="val.min" :max="val.max" :step="val.step" class="w-full accent-blue-600 h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
                 :style="{ accentColor: store.config.themeColor }">
             </div>
           </div>
@@ -249,11 +263,12 @@
             <label class="text-xs font-bold text-gray-500 block mb-3">📋 页面边距 (mm)</label>
             <div class="grid grid-cols-4 gap-2">
               <div v-for="dir in marginDirections" :key="dir">
-                <span class="block text-[9px] text-gray-500 mb-1 text-center font-bold uppercase">{{ dir }}</span>
-                <input type="number" v-model.number="store.config.margin[dir]"
+                <label :for="`margin-${dir}`" class="block text-[9px] text-gray-500 mb-1 text-center font-bold">{{ marginLabelMap[dir] }}</label>
+                <input :id="`margin-${dir}`" type="number" v-model.number="store.config.margin[dir]" min="0" max="50" step="1"
                   class="w-full border border-gray-200 rounded-lg p-2 text-center text-xs focus:outline-none bg-white"
-                  @focus="e => e.target.style.borderColor = store.config.themeColor"
-                  @blur="e => e.target.style.borderColor = ''">
+                  @focus="$event.target.style.borderColor = store.config.themeColor"
+                  @change="normalizeMargin(dir)"
+                  @blur="handleMarginBlur($event, dir)">
               </div>
             </div>
           </div>
@@ -279,10 +294,10 @@
             <div class="flex items-center gap-3">
               <div v-if="mod.visible && !mod.isSingle" class="flex items-center gap-1.5 text-[10px] text-gray-500">
                 <span>分割线</span>
-                <input type="checkbox" v-model="mod.showDivider" class="cursor-pointer accent-blue-600 w-3.5 h-3.5">
+                <input type="checkbox" v-model="mod.showDivider" :aria-label="`${mod.title}条目分割线`" class="cursor-pointer accent-blue-600 w-3.5 h-3.5">
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" v-model="mod.visible" class="sr-only peer">
+                <input type="checkbox" v-model="mod.visible" class="sr-only peer" :aria-label="`${mod.title}显示状态`">
                 <div class="w-8 h-4 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all"
                   :class="mod.visible ? `after:bg-[${store.config.themeColor}]` : ''"></div>
               </label>
@@ -329,6 +344,7 @@ const dragIndex = ref(null)
 const currentModule = computed(() => store.modules.find(m => m.id === activeSubTab.value) ?? store.modules[0] ?? null)
 const infoFieldMap = { name: '姓名', intent: '求职意向', phone: '手机', email: '邮箱', github: '社交/博客', degree: '最高学历', location: '城市' }
 const marginDirections = ['top', 'bottom', 'left', 'right']
+const marginLabelMap = { top: '上', bottom: '下', left: '左', right: '右' }
 
 const configRangeMap = {
   nameSize: { label: '姓名文字大小', min: 20, max: 50, step: 1, unit: 'px' },
@@ -336,8 +352,20 @@ const configRangeMap = {
   titleSize: { label: '模块栏标题大小', min: 12, max: 24, step: 1, unit: 'px' },
   titleFontSize: { label: '经历标题字号 (P1/P2/P3)', min: 10, max: 16, step: 0.5, unit: 'px' },
   bodyFontSize: { label: '描述正文字号', min: 9, max: 14, step: 0.5, unit: 'px' },
-  lineHeight: { label: '正文行高调节', min: 1.0, max: 2.5, step: 0.1, unit: '' },
+  lineHeight: { label: '正文行高调节', min: 1.0, max: 2.5, step: 0.05, unit: '' },
   moduleSpacing: { label: '模块间距宽度', min: 0, max: 50, step: 1, unit: 'px' }
+}
+
+const normalizeMargin = (direction) => {
+  const value = Number(store.config.margin[direction])
+  store.config.margin[direction] = Number.isFinite(value)
+    ? Math.min(50, Math.max(0, value))
+    : 10
+}
+
+const handleMarginBlur = (event, direction) => {
+  normalizeMargin(direction)
+  event.target.style.borderColor = ''
 }
 
 // ✨ 处理文件导入事件

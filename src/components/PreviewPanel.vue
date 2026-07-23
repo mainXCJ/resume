@@ -1,5 +1,9 @@
 <template>
-  <div id="preview-container" class="w-1/2 print:w-full flex justify-center overflow-y-auto p-4 no-scrollbar bg-gray-50 print:bg-white print:p-0 items-start">
+  <div
+    id="preview-container"
+    ref="previewContainerRef"
+    class="w-1/2 print:w-full flex justify-center overflow-y-auto overflow-x-hidden p-4 no-scrollbar bg-gray-50 print:bg-white print:p-0 items-start"
+  >
     <div v-html="printStyle"></div>
 
     <!-- 屏幕预览 -->
@@ -7,54 +11,64 @@
       <div
         v-for="(page, pageIndex) in paginatedPages"
         :key="`screen-page-${pageIndex}`"
-        data-resume-screen-page
-        class="resume-paper bg-white shadow-2xl relative"
-        :style="screenPageStyle"
+        class="screen-page-shell shrink-0"
+        :style="screenPageShellStyle"
       >
-        <!-- 侧栏模板：双栏结构 -->
-        <template v-if="store.template === 'sidebar'">
-          <div class="flex" :style="{ minHeight: '297mm' }">
-            <!-- 左侧侧栏 -->
-            <div class="shrink-0" :style="{ width: '35%', background: store.config.themeColor }">
-              <div v-for="block in page.filter(b => b.__side === 'left')" :key="block.id">
-                <ResumeContentBlock
-                  :block="block"
-                  :block-id="block.id"
-                  :render-rich-text="renderRichText"
-                  :store="store"
-                />
+        <div
+          data-resume-screen-page
+          class="resume-paper bg-white shadow-2xl relative"
+          :style="screenPreviewPageStyle"
+        >
+          <!-- 侧栏模板：双栏结构 -->
+          <template v-if="store.template === 'sidebar'">
+            <div class="flex" :style="{ minHeight: '297mm' }">
+              <!-- 左侧侧栏 -->
+              <div class="shrink-0" :style="{ width: '35%', background: store.config.themeColor }">
+                <div v-for="block in page.filter(b => b.__side === 'left')" :key="block.id">
+                  <ResumeContentBlock
+                    :block="block"
+                    :block-id="block.id"
+                    :render-rich-text="renderRichText"
+                    :store="store"
+                  />
+                </div>
+              </div>
+              <!-- 右侧主内容 -->
+              <div class="flex-1 p-5" :style="{ background: '#ffffff' }">
+                <div v-for="block in page.filter(b => b.__side === 'right')" :key="block.id">
+                  <ResumeContentBlock
+                    :block="block"
+                    :block-id="block.id"
+                    :render-rich-text="renderRichText"
+                    :store="store"
+                  />
+                </div>
               </div>
             </div>
-            <!-- 右侧主内容 -->
-            <div class="flex-1 p-5" :style="{ background: '#ffffff' }">
-              <div v-for="block in page.filter(b => b.__side === 'right')" :key="block.id">
-                <ResumeContentBlock
-                  :block="block"
-                  :block-id="block.id"
-                  :render-rich-text="renderRichText"
-                  :store="store"
-                />
-              </div>
-            </div>
-          </div>
-        </template>
+          </template>
 
-        <!-- 其他模板：标准单栏 -->
-        <template v-else>
-          <ResumeContentBlock
-            v-for="block in page"
-            :key="block.id"
-            :block="block"
-            :block-id="block.id"
-            :render-rich-text="renderRichText"
-            :store="store"
-          />
-        </template>
+          <!-- 其他模板：标准单栏 -->
+          <template v-else>
+            <ResumeContentBlock
+              v-for="block in page"
+              :key="block.id"
+              :block="block"
+              :block-id="block.id"
+              :render-rich-text="renderRichText"
+              :store="store"
+            />
+          </template>
+        </div>
       </div>
     </div>
 
     <!-- 测量容器（用于分页计算） -->
-    <div class="fixed left-[-99999px] top-0 opacity-0 pointer-events-none print:hidden">
+    <div
+      aria-hidden="true"
+      inert
+      role="presentation"
+      class="fixed left-[-99999px] top-0 opacity-0 pointer-events-none print:hidden"
+    >
       <div ref="measurePageRef" class="resume-paper bg-white relative" :style="measurePageStyle">
         <template v-if="store.template === 'sidebar'">
           <div class="flex">
@@ -84,7 +98,7 @@
     </div>
 
     <!-- 打印画布：直接复用屏幕预览的分页结果，保证生成样式与预览一致 -->
-    <div id="resume-canvas" class="hidden print:block">
+    <div id="resume-canvas" aria-hidden="true" inert role="presentation" class="hidden print:block">
       <div
         v-for="(page, pageIndex) in paginatedPages"
         :key="`print-page-${pageIndex}`"
@@ -128,8 +142,12 @@ import { TEMPLATES, getThemeOptions } from '../templates.js'
 import ResumeContentBlock from './ResumeContentBlock.vue'
 
 const measurePageRef = ref(null)
+const previewContainerRef = ref(null)
 const paginatedPages = ref([])
+const screenScale = ref(1)
+const measuredPageSize = ref({ width: 0, height: 0 })
 let paginationFrame = null
+let resizeObserver = null
 
 const visibleModules = computed(() => store.modules.filter(mod => mod.visible))
 const tableSeparatorPattern = /^\s*\|(?:\s*[-:]+\s*\|)+\s*$/
@@ -170,6 +188,21 @@ const screenPageStyle = computed(() => ({
   ...sharedPageStyle.value,
   background: '#ffffff'
 }))
+
+const screenPreviewPageStyle = computed(() => ({
+  ...screenPageStyle.value,
+  transform: `scale(${screenScale.value})`,
+  transformOrigin: 'top left'
+}))
+
+const screenPageShellStyle = computed(() => {
+  const { width, height } = measuredPageSize.value
+  if (!width || !height) return { width: '210mm', minHeight: '297mm' }
+  return {
+    width: `${width * screenScale.value}px`,
+    height: `${height * screenScale.value}px`
+  }
+})
 
 const measurePageStyle = computed(() => ({
   ...sharedPageStyle.value,
@@ -370,12 +403,30 @@ const createScreenBlocks = () => {
 
 const screenBlocks = computed(createScreenBlocks)
 
+const updateScreenScale = () => {
+  const container = previewContainerRef.value
+  const measurePage = measurePageRef.value
+  if (!container || !measurePage) return
+
+  const containerStyles = window.getComputedStyle(container)
+  const horizontalPadding =
+    (parseFloat(containerStyles.paddingLeft) || 0) +
+    (parseFloat(containerStyles.paddingRight) || 0)
+  const availableWidth = Math.max(0, container.clientWidth - horizontalPadding)
+  const pageRect = measurePage.getBoundingClientRect()
+  if (!pageRect.width || !availableWidth) return
+
+  measuredPageSize.value = { width: pageRect.width, height: pageRect.height }
+  screenScale.value = Math.min(1, Math.max(0.2, availableWidth / pageRect.width))
+}
+
 const queuePagination = async () => {
   if (paginationFrame) cancelAnimationFrame(paginationFrame)
   await nextTick()
   paginationFrame = requestAnimationFrame(() => {
     paginationFrame = requestAnimationFrame(() => {
       paginationFrame = null
+      updateScreenScale()
       paginateBlocks()
     })
   })
@@ -454,6 +505,8 @@ const paginateBlocks = () => {
 
 onMounted(() => {
   queuePagination()
+  resizeObserver = new ResizeObserver(queuePagination)
+  if (previewContainerRef.value) resizeObserver.observe(previewContainerRef.value)
   window.addEventListener('resize', queuePagination)
   if (document.fonts?.ready) {
     document.fonts.ready.then(queuePagination)
@@ -462,6 +515,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (paginationFrame) cancelAnimationFrame(paginationFrame)
+  resizeObserver?.disconnect()
   window.removeEventListener('resize', queuePagination)
 })
 

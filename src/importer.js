@@ -3,7 +3,8 @@
  * 从上传的文件中提取文本并尝试解析到 store
  */
 
-import * as mammoth from 'mammoth'
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import { detectResumeSection } from './sectionDetector.js'
 
 /**
  * 从文件中提取纯文本
@@ -31,6 +32,7 @@ export async function extractTextFromFile(file) {
  */
 async function extractFromDocx(file) {
   const arrayBuffer = await file.arrayBuffer()
+  const mammoth = await import('mammoth')
   const result = await mammoth.extractRawText({ arrayBuffer })
   return result.value
 }
@@ -42,13 +44,10 @@ async function extractFromDocx(file) {
 async function extractFromPdf(file) {
   const arrayBuffer = await file.arrayBuffer()
 
-  // 使用 pdf.js（CDN worker 方式，兼容 Vite 构建）
+  // 使用随应用一起构建的 pdf.js worker，离线环境也能导入 PDF
   try {
     const pdfjsLib = await import('pdfjs-dist')
-
-    // 使用 CDN worker（从 npm 获取对应版本）
-    const version = pdfjsLib.version || '6.1.200'
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`
+    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl
 
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise
     let fullText = ''
@@ -155,54 +154,10 @@ export function parseResumeText(text) {
   }
 
   // 4. 分段识别简历模块 — 改进版：逐行扫描，不跳过任何行
-  const sectionHeaders = [
-    { id: 'edu', keywords: ['教育背景', '教育经历', '教育', '学历', 'Education'] },
-    { id: 'work', keywords: ['工作经历', '工作经验', '工作经历', 'Employment', 'Experience'] },
-    { id: 'project', keywords: ['项目经历', '项目经验', '项目', 'Projects'] },
-    { id: 'intern', keywords: ['实习经历', '实习', 'Internship'] },
-    { id: 'skills', keywords: ['专业技能', '技能', 'Skills', '技术栈', '个人技能', '职业能力'] },
-    { id: 'award', keywords: ['获奖', '荣誉', '奖项', '获奖经历', 'Awards'] },
-    { id: 'cert', keywords: ['证书', '资格', '证书信息', 'Certifications'] },
-    { id: 'eval', keywords: ['自我评价', '个人评价', '关于我', 'Summary', '自我评价'] },
-    { id: 'research', keywords: ['科研', '论文', '专利', '科研成果', 'Publications'] },
-    { id: 'campus', keywords: ['校园经历', '社团', '学生工作', '校园'] },
-  ]
-
-  // 构建关键词→sectionId的映射，用于快速查找
-  const keywordMap = {}
-  for (const sh of sectionHeaders) {
-    for (const kw of sh.keywords) {
-      keywordMap[kw] = sh.id
-    }
-  }
-
-  // 所有关键词按长度降序排序（长关键词优先匹配）
-  const sortedKeywords = Object.keys(keywordMap).sort((a, b) => b.length - a.length)
-
-  const detectSection = (line) => {
-    // 行首必须是中文或英文字母（排除内容中意外包含关键词）
-    if (!line) return null
-    // 要求行长度不超过30（真实标题通常很短）
-    if (line.length > 30) return null
-    // 不能包含明显的标点符号（避免匹配到句子中间）
-    if (/^[，。、！？；：,.\n]/.test(line)) return null
-
-    for (const kw of sortedKeywords) {
-      // 关键字必须出现在行首附近（前4个字符内）
-      const idx = line.indexOf(kw)
-      if (idx >= 0 && idx <= 4) {
-        // 行内容基本就是关键词本身（允许前后少量修饰符）
-        const sectionId = keywordMap[kw]
-        if (sectionId) return sectionHeaders.find(sh => sh.id === sectionId)
-      }
-    }
-    return null
-  }
-
   // 先检测所有行，标记哪些是 section 标题
   const lineAnnotations = lines.map(line => ({
     line,
-    section: detectSection(line)
+    section: detectResumeSection(line)
   }))
 
   // 将未匹配到 section 的信息行（前几行）提取为个人信息
