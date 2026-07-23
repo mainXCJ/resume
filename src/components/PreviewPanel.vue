@@ -7,6 +7,7 @@
       <div
         v-for="(page, pageIndex) in paginatedPages"
         :key="`screen-page-${pageIndex}`"
+        data-resume-screen-page
         class="resume-paper bg-white shadow-2xl relative"
         :style="screenPageStyle"
       >
@@ -82,32 +83,40 @@
       </div>
     </div>
 
-    <!-- 打印画布 -->
-    <div id="resume-canvas" class="resume-paper bg-white shadow-2xl relative hidden print:block print:shadow-none" :style="printCanvasStyle">
-      <template v-if="store.template === 'sidebar'">
-        <div class="flex">
-          <div :style="{ width: '35%', background: store.config.themeColor }">
-            <div v-for="block in printBlocks.filter(b => b.__side === 'left')" :key="block.id">
-              <ResumeContentBlock :block="block" :block-id="block.id" :render-rich-text="renderRichText" :store="store" />
+    <!-- 打印画布：直接复用屏幕预览的分页结果，保证生成样式与预览一致 -->
+    <div id="resume-canvas" class="hidden print:block">
+      <div
+        v-for="(page, pageIndex) in paginatedPages"
+        :key="`print-page-${pageIndex}`"
+        class="resume-paper print-page bg-white relative"
+        :class="{ 'print-page-last': pageIndex === paginatedPages.length - 1 }"
+        :style="screenPageStyle"
+      >
+        <template v-if="store.template === 'sidebar'">
+          <div class="flex" :style="{ minHeight: '297mm' }">
+            <div class="shrink-0" :style="{ width: '35%', background: store.config.themeColor }">
+              <div v-for="block in page.filter(b => b.__side === 'left')" :key="block.id">
+                <ResumeContentBlock :block="block" :block-id="block.id" :render-rich-text="renderRichText" :store="store" />
+              </div>
+            </div>
+            <div class="flex-1 p-5" :style="{ background: '#ffffff' }">
+              <div v-for="block in page.filter(b => b.__side === 'right')" :key="block.id">
+                <ResumeContentBlock :block="block" :block-id="block.id" :render-rich-text="renderRichText" :store="store" />
+              </div>
             </div>
           </div>
-          <div class="flex-1 p-5">
-            <div v-for="block in printBlocks.filter(b => b.__side === 'right')" :key="block.id">
-              <ResumeContentBlock :block="block" :block-id="block.id" :render-rich-text="renderRichText" :store="store" />
-            </div>
-          </div>
-        </div>
-      </template>
-      <template v-else>
-        <ResumeContentBlock
-          v-for="block in printBlocks"
-          :key="block.id"
-          :block="block"
-          :block-id="block.id"
-          :render-rich-text="renderRichText"
-          :store="store"
-        />
-      </template>
+        </template>
+        <template v-else>
+          <ResumeContentBlock
+            v-for="block in page"
+            :key="block.id"
+            :block="block"
+            :block-id="block.id"
+            :render-rich-text="renderRichText"
+            :store="store"
+          />
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -125,10 +134,6 @@ let paginationFrame = null
 const visibleModules = computed(() => store.modules.filter(mod => mod.visible))
 const tableSeparatorPattern = /^\s*\|(?:\s*[-:]+\s*\|)+\s*$/
 
-const currentTemplate = computed(() =>
-  TEMPLATES.find(t => t.id === store.template) || TEMPLATES[0]
-)
-
 // 当切换模板时，自动更新主题色和配置
 watch(() => store.template, (newTemplateId) => {
   const tpl = TEMPLATES.find(t => t.id === newTemplateId)
@@ -144,19 +149,20 @@ watch(() => store.template, (newTemplateId) => {
 })
 
 const sharedPageStyle = computed(() => {
-  const tpl = currentTemplate.value
   const isSidebar = store.template === 'sidebar'
+  const margin = store.config.margin
 
   return {
     width: '210mm',
     minHeight: '297mm',
     height: 'max-content',
     boxSizing: 'border-box',
-    padding: isSidebar ? '0' : `${tpl.config.margin.top}mm ${tpl.config.margin.right}mm ${tpl.config.margin.bottom}mm ${tpl.config.margin.left}mm`,
-    lineHeight: tpl.config.lineHeight,
+    padding: isSidebar ? '0' : `${margin.top}mm ${margin.right}mm ${margin.bottom}mm ${margin.left}mm`,
+    lineHeight: store.config.lineHeight,
     '--print-theme-color': store.config.themeColor,
-    '--print-page-margin-top': `${tpl.config.margin.top}mm`,
-    '--print-page-margin-bottom': `${tpl.config.margin.bottom}mm`,
+    '--resume-body-line-height': store.config.lineHeight,
+    '--print-page-margin-top': `${margin.top}mm`,
+    '--print-page-margin-bottom': `${margin.bottom}mm`,
   }
 })
 
@@ -170,11 +176,6 @@ const measurePageStyle = computed(() => ({
   height: '297mm',
   minHeight: '297mm',
   overflow: 'hidden',
-  background: '#ffffff'
-}))
-
-const printCanvasStyle = computed(() => ({
-  ...sharedPageStyle.value,
   background: '#ffffff'
 }))
 
@@ -367,7 +368,6 @@ const createScreenBlocks = () => {
   return blocks
 }
 
-const printBlocks = computed(createPrintBlocks)
 const screenBlocks = computed(createScreenBlocks)
 
 const queuePagination = async () => {
@@ -528,9 +528,6 @@ const printStyle = computed(() => `
         position: static !important;
         width: 100% !important;
         height: auto !important;
-        min-height: 297mm !important;
-        max-height: none !important;
-        box-sizing: border-box !important;
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
@@ -538,11 +535,21 @@ const printStyle = computed(() => `
         background: #ffffff !important;
         overflow: visible !important;
       }
-      .page-break-lines { background-image: none !important; }
-      section, div, table, tr, td {
-        page-break-inside: auto !important;
-        break-inside: auto !important;
+      #resume-canvas .print-page {
+        width: 210mm !important;
+        min-height: 297mm !important;
+        height: 297mm !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        page-break-after: always !important;
+        break-after: page !important;
       }
+      #resume-canvas .print-page-last {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+      .page-break-lines { background-image: none !important; }
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -657,9 +664,8 @@ const renderRichText = (text) => {
   }
   .w-1\/2 { width: 100% !important; }
   .resume-paper {
-    width: 100% !important;
-    min-height: 100% !important;
-    height: auto !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
     box-sizing: border-box !important;
     margin: 0 !important;
     background: #ffffff !important;

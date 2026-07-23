@@ -69,13 +69,12 @@ const adjustGlobalFontSize = (delta) => {
 }
 
 const handlePrint = () => {
-    showToast('🖨️ 即将打开打印对话框…', 2000)
-    setTimeout(() => window.print(), 500)
+    window.print()
 }
 
 const handleExportDocx = () => {
   // 优先读取屏幕预览内容，隐藏的 resume-canvas 用于回退
-  const screenPapers = document.querySelectorAll('#preview-container .resume-paper:not(.fixed)')
+  const screenPapers = document.querySelectorAll('#preview-container [data-resume-screen-page]')
   let contentHTML = ''
 
   if (screenPapers.length) {
@@ -96,6 +95,7 @@ const handleExportDocx = () => {
   const titleSize = store.config.titleSize
   const bodySize = store.config.bodyFontSize
   const lineH = store.config.lineHeight
+  const pageMargin = store.config.margin
 
   // 构建 Word 兼容的 HTML 文档
   const docHTML = `<!DOCTYPE html>
@@ -115,7 +115,7 @@ const handleExportDocx = () => {
 <![endif]-->
 <style>
   /* 页面设置 */
-  @page { size: A4; margin: 14mm 13mm; }
+  @page { size: A4; margin: ${pageMargin.top}mm ${pageMargin.right}mm ${pageMargin.bottom}mm ${pageMargin.left}mm; }
   body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: ${bodySize}pt; line-height: ${lineH}; color: #374151; }
   h1 { font-size: ${nameSize}pt; color: ${themeColor}; margin: 0 0 4px; }
   h2 { font-size: ${titleSize}pt; color: ${themeColor}; border-bottom: 1.5px solid #eee; padding-bottom: 4px; margin: 8px 0 6px; }

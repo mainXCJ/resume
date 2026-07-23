@@ -1,4 +1,5 @@
 <template>
+  <div class="resume-content-block" :data-block-type="block.type">
   <!-- ==================== 侧栏模板 (sidebar) ==================== -->
   <template v-if="store.template === 'sidebar'">
     <!-- 侧栏 - 个人信息 -->
@@ -1044,6 +1045,7 @@
       <hr v-if="block.showDivider" class="border-t border-dashed border-gray-200 mt-2 mb-2" />
     </div>
   </template>
+  </div>
 </template>
 
 <script setup>
@@ -1054,3 +1056,17 @@ defineProps({
   store: { type: Object, required: true }
 })
 </script>
+
+<style scoped>
+.resume-content-block {
+  display: contents;
+}
+
+.resume-content-block[data-block-type="item-content"] > [data-block-id],
+.resume-content-block[data-block-type="main-item-content"] > [data-block-id],
+.resume-content-block[data-block-type="sidebar-item"] > [data-block-id],
+.resume-content-block[data-block-type="table-row"] > [data-block-id],
+.resume-content-block[data-block-type="item"] > [data-block-id] {
+  line-height: var(--resume-body-line-height, 1.15) !important;
+}
+</style>
