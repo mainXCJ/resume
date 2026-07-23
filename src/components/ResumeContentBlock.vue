@@ -58,7 +58,11 @@
     <div v-else-if="block.type === 'sidebar-module-title'"
       :data-block-id="blockId">
       <h3 class="text-white/90 font-bold text-xs uppercase tracking-wider px-4"
-        :style="{ paddingTop: block.isFirst ? '4px' : '20px', paddingBottom: '8px' }">
+        :style="{
+          paddingTop: block.isFirst ? '4px' : '20px',
+          paddingBottom: '8px',
+          fontSize: store.config.titleSize + 'px'
+        }">
         {{ block.mod.title }}
       </h3>
     </div>
@@ -159,7 +163,7 @@
       :style="{ borderTop: '2px solid #eee' }"
     >
       <h2 class="font-bold text-gray-700 tracking-widest uppercase text-xs"
-        :style="{ color: store.config.themeColor }">
+        :style="{ color: store.config.themeColor, fontSize: store.config.titleSize + 'px' }">
         {{ block.mod.title }}
       </h2>
     </div>
@@ -250,7 +254,7 @@
       class="mb-2 mt-1"
     >
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-white text-xs font-bold"
-        :style="{ background: store.config.themeColor }">
+        :style="{ background: store.config.themeColor, fontSize: store.config.titleSize + 'px' }">
         <span>{{ block.mod.icon }}</span>
         <span>{{ block.mod.title }}</span>
       </div>
@@ -449,6 +453,7 @@
         background: store.config.themeColor,
         padding: '3px 8px',
         borderRadius: '2px',
+        fontSize: store.config.titleSize + 'px',
       }">
       {{ block.mod.title }}
     </div>
@@ -713,7 +718,7 @@
       class="mb-2 mt-1"
     >
       <h2 class="font-medium text-gray-600 tracking-widest uppercase text-xs flex items-center gap-2"
-        :style="{ color: store.config.themeColor }">
+        :style="{ color: store.config.themeColor, fontSize: store.config.titleSize + 'px' }">
         <span class="icon">{{ block.mod.icon }}</span>{{ block.mod.title }}
         <span class="flex-1 h-px" :style="{ background: store.config.themeColor + '22' }"></span>
       </h2>
